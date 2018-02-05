@@ -39,6 +39,23 @@ function! YXVim#api#base#load_support(name) abort
 endfunction
 
 
+function! YXVim#api#base#test2()
+    echom "lalal"
+endfunction
+
+function! YXVim#api#base#test()
+  return map({
+        \ 'execute' : '',
+        \ 'system' : '',
+        \ 'systemlist' : '',
+        \ 'version' : '',
+        \ 'has' : '',
+        \ 'globpath' : '',
+        \ },
+        \ "function('s:' . v:key)"
+        \ )
+endfunction
+
 
 
 

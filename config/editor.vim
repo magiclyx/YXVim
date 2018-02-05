@@ -8,12 +8,18 @@
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" No Vi compatible
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set nocompatible
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Autoread
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " When a file has been detected to have been changed outside of Vim
 " and it has not been changed inside of Vim
 set autoread
-
 
 
 
@@ -114,6 +120,7 @@ set magic
 if YXVim#api#system#Windows()
     set ffs=unix,dos,mac
 elseif YXVim#api#system#OSX()
+    "set ffs=unix,dos,mac
     set ffs=mac,unix,dos
 else
     set ffs=unix,dos,mac

@@ -32,6 +32,10 @@ let g:Binary_Main_Home = g:Src_Main_Home.'/bin'
 " set user config Home
 let g:Config_User_Home = g:Src_Main_Home.'/.YXVim.d'
 
+" set data Home
+let g:Data_Home = $HOME.'/.data/vim'
+
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " extend $PATH environment
@@ -57,9 +61,19 @@ nnoremap <leader>r :call YXVim#api#base#src_reload()<CR>
 
 
 
+
+function! s:tttt()
+    call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
+endfunction
+
+nnoremap <leader>x :call <SID>tttt()<CR>
+
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " load other configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 " load base
 call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
@@ -85,8 +99,13 @@ call YXVim#api#base#source(s:_current_file_dir.'/cmd.vim')
 " load completion
 call YXVim#api#base#source(s:_current_file_dir.'/completion.vim')
 
-" load map
-call YXVim#api#base#source(s:_current_file_dir.'/map.vim')
+" load plugin
+call YXVim#api#base#source(s:_current_file_dir.'/plugin.vim')
 
+
+call YXVim#api#base#source(s:_current_file_dir.'/job.vim')
+
+
+" call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
 
 
