@@ -13,7 +13,7 @@ let s:self = {
 "3 : log error messages only
 let s:levels = ['Info', 'Warn', 'Error']
 
-function! YXVim#lib#logger#get() abort
+function! YXVim#lib#vimlib#logger#get() abort
   return deepcopy(s:self)
 endfunction
 

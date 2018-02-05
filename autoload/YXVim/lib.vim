@@ -5,11 +5,8 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! YXVim#lib#test2()
-    echom "lalal"
-endfunction
-
 let s:apis = {}
+let s:has_nvim = has('nvim')
 
 function! YXVim#lib#import(name) abort
   if has_key(s:apis, a:name)
@@ -17,10 +14,18 @@ function! YXVim#lib#import(name) abort
   endif
   let p = {}
   try
-    let p = YXVim#lib#{a:name}#get()
+
+    if s:has_nvim
+      let p = YXVim#lib#neolib#{a:name}#get()
+    else
+      let p = YXVim#lib#vimlib#{a:name}#get()
+    endif
+
     let s:apis[a:name] = p
   catch /^Vim\%((\a\+)\)\=:E117/
+    echo 'failed'
   endtry
+
   return p
 endfunction
 

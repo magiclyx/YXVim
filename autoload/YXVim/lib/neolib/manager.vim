@@ -6,6 +6,16 @@
 " License: MIT license
 "=============================================================================
 
+function! YXVim#lib#vimlib#manager#get() abort
+  return map({
+        \ 'update' : '',
+        \ 'install' : '',
+        \ 'reinstall' : '',
+        \ },
+        \ "function('s:' . v:key)"
+        \ )
+endfunction
+
 " Load SpaceVim api
 let s:VIM_CO = YXVim#lib#import('compatible')
 let s:JOB = YXVim#lib#import('job')
@@ -110,13 +120,13 @@ function! s:get_uninstalled_plugins() abort
 endfunction
 
 
-function! YXVim#lib#manager#reinstall(...)
+function! s:reinstall(...)
   call dein#reinstall(a:1)
 endfunction
 
 
 " @vimlint(EVL102, 1, l:i)
-function! YXVim#lib#manager#install(...) abort
+function! s:install(...) abort
   if !s:JOB.vim_job && !s:JOB.nvim_job
     let &maxfuncdepth = 2000
   endif
@@ -164,7 +174,7 @@ endfunction
 " @vimlint(EVL102, 0, l:i)
 
 " @vimlint(EVL102, 1, l:i)
-function! YXVim#lib#manager#update(...) abort
+function! s:update(...) abort
   if !s:JOB.vim_job && !s:JOB.nvim_job
     let &maxfuncdepth = 2000
   endif
@@ -549,7 +559,7 @@ function! s:open_plugin_dir() abort
     exe 'topleft split'
     enew
     exe 'resize ' . &lines * 30 / 100
-    let shell = empty($SHELL) ? YXVim#lib#import('system').isWindows ? 'cmd.exe' : 'bash' : $SHELL
+    let shell = empty($SHELL) ? YXVim#lib#neolib#import('system').isWindows ? 'cmd.exe' : 'bash' : $SHELL
     if has('nvim')
       call termopen(shell, {'cwd' : dein#get(keys(plugin)[0]).path})
     else

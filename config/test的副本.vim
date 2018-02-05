@@ -62,19 +62,19 @@ let s:manager = YXVim#lib#import('manager')
 
 function! s:update_plugin(...) abort
     if a:0 == 0
-      call s:manager.update()
+      call YXVim#lib#manager#update()
     else
-      call s:manager.update(a:000)
+      call YXVim#lib#manager#update(a:000)
     endif
 endfunction
 
 function! s:reinstall_plugin(...)
-  call s:manager.reinstall(a:000)
+  call YXVim#lib#manager#reinstall(a:000)
 endfunction
 
 function! s:install_plugin(...) abort
     if a:0 == 0
-      call s:manager.install()
+      call YXVim#lib#manager#install()
     else
       call dein#install(a:000)
     endif

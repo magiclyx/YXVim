@@ -1,4 +1,4 @@
-function! YXVim#lib#compatible#get() abort
+function! YXVim#lib#vimlib#compatible#get() abort
   return map({
         \ 'execute' : '',
         \ 'system' : '',
