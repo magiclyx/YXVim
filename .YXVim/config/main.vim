@@ -1,0 +1,68 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Author: Yuxi Liu
+" Version: 2.0 - 01/07/2018 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+let s:_current_file_path = resolve(expand('<sfile>:p'))
+let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Global Variable
+" Config Home & Binary Home
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" set a global variable to indicate main home
+"let g:Config_Main_Home = fnamemodify(expand('<sfile>'),
+"      \ ':p:h:gs?\\?'.((has('win16') || has('win32')
+"      \ || has('win64'))?'\':'/') . '?')
+
+" set config Main Home
+let g:Config_Main_Home = s:_current_file_dir
+
+" set binary Main Home
+let g:Binary_Main_Home = g:Src_Main_Home.'/bin'
+
+" set user config Home
+let g:Config_User_Home = g:Src_Main_Home.'/.YXVim.d'
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" extend $PATH environment
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let $PATH .= g:Binary_Main_Home
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" set runtimepath
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" set runtimepath^=g:Config_User_Home
+execute 'set runtimepath+='.g:Config_User_Home
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" map commands
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" fast edit vimrc
+nnoremap <leader>e :call YXVim#api#base#src_open()<CR>
+
+" fase reload vimrc
+nnoremap <leader>r :call YXVim#api#base#src_reload()<CR>
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" load other configuration
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" load ui
+call YXVim#api#base#source(s:_current_file_dir.'/ui.vim')
+
+" load encoding
+call YXVim#api#base#source(s:_current_file_dir.'/encoding.vim')
+
+
+
