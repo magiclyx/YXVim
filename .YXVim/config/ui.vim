@@ -33,44 +33,95 @@ if $COLORTERM ==# 'gnome-terminal'
 endif
 
 
-" indent use backspace delete indent, eol use backspace delete line at
-" begining start delete the char you just typed in if you do not use set
-" nocompatible ,you need this
-set backspace=indent,eol,start
 
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Redraw
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Redraw the screen frequently
+set nolazyredraw
+
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" left/ right
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "Allow specified keys that move the cursor left/right to move to
 "the previous/next line when the cursor is on the first/last character in the line.
 "set whichwrap+=<,>,h,l
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" number of line
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Shou number and relativenumber
 set number
 set relativenumber
 
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" fillchar
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " set fillchar
 hi VertSplit ctermbg=NONE guibg=NONE
 set fillchars+=vert:│
 
 
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " show cmd on right bottom corner
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "set noshowcmd
 set showcmd
 
 
-" indent
-set autoindent
-set smartindent
-set cindent
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Ruler
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Show the line and column number of the cursor position on the right bottom
+" corner.
+set ruler
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " show wildmenu
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set wildmenu
 
 
-" do not break words
-" If on, Vim will wrap long lines at a character in
-" 'breakat' rather than at the last character that fits on the screen.
-set linebreak
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Status line
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+"The value of this option influences when the last window will have a status line:
+"        0: never
+"        1: only if there are at least two windows
+"        2: always
+set laststatus=2
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Short message
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" don't give ins-completion-menu messages.
+if has('patch-7.4.314')
+    set shortmess+=c
+endif
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fold
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" open default foldenable (it's default mod)
+set foldenable
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -90,13 +141,6 @@ augroup END
 
 " Minimal number of screen lines to keep above and below the cursor
 set scrolloff=3
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" File type
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-filetype on
-filetype plugin on
-filetype indent on
 
 
 
@@ -119,6 +163,17 @@ endif
 " Mouse
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set mouse=nv
+
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" No sounds on error
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"set noerrorbells
+"set novisualbell
+"set t_vb=
+
 
 
 
