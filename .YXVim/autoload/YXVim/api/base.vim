@@ -33,11 +33,9 @@ function! YXVim#api#base#src_open() abort
     call YXVim#api#base#exec_proclaim(':e! '.g:Config_Main_Home.'/main.vim')
 endfunction
 
-" load plugin
-" TODO: upload from network and local
-let s:_plugin_path = g:Config_Main_Home.'/plugins'
-function! YXVim#api#base#plugin_load(name) abort
-    call YXVim#api#base#exec_silent(':source '.s:_plugin_path.'/'.a:name.'.vim')
+" load support script
+function! YXVim#api#base#load_support(name) abort
+    call YXVim#api#base#exec_silent(':source '.g:Support_Main_Home.'/'.a:name)
 endfunction
 
 

@@ -40,7 +40,7 @@ scriptencoding utf-8
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " Load fencview
-call YXVim#api#base#plugin_load('fencview')
+call YXVim#api#base#load_support('fencview/fencview.vim')
 
 " If tellenc is executable, it will  be used by default. (default value)
 " If you still want to use  the detection mechanism of this script, set the value to "fencview".

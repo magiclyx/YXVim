@@ -23,6 +23,9 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 " set config Main Home
 let g:Config_Main_Home = s:_current_file_dir
 
+" set support Main Home
+let g:Support_Main_Home = g:Config_Main_Home.'/support'
+
 " set binary Main Home
 let g:Binary_Main_Home = g:Src_Main_Home.'/bin'
 
