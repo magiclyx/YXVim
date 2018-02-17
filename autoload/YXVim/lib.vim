@@ -6,6 +6,7 @@
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 let s:apis = {}
+let s:internal_apis = {}
 let s:has_nvim = has('nvim')
 
 function! YXVim#lib#import(name) abort
@@ -26,8 +27,27 @@ function! YXVim#lib#import(name) abort
     echo 'failed'
   endtry
 
-  return p
+  return deepcopy(p)
 endfunction
+
+
+function! YXVim#lib#internal(name) abort
+  if has_key(s:internal_apis, a:name)
+    return deepcopy(s:internal_apis[a:name])
+  endif
+
+  let p = {}
+
+  try
+    let p = YXVim#internal#{a:name}#get()
+    let s:internal_apis[a:name] = p
+  catch /^Vim\%((\a\+)\)\=:E117/
+    echo 'failed'
+  endtry
+
+  return deepcopy(p)
+endfunction
+
 
 function! YXVim#lib#register(name, api) abort
   if !empty(YXVim#lib#import(a:name))

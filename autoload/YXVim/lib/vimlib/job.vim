@@ -1,5 +1,13 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Author: Yuxi Liu
+" Version: 2.0 - 02/17/2018 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
 function! YXVim#lib#vimlib#job#get() abort
-  return deepcopy(s:self)
+  return s:self
 endfunction 
 
 " make vim and neovim use same job func.
@@ -9,6 +17,8 @@ let s:self.nvim_job = has('nvim')
 let s:self.vim_job = !has('nvim') && has('job') && has('patch-8.0.0027')
 let s:self.vim_co = YXVim#lib#import('compatible')
 let s:self._message = []
+
+let s:id_sequence = 0
 
 if !s:self.vim_job
   augroup SpaceVim_job
@@ -75,17 +85,25 @@ endfunction
 
 " start a job, and return the job_id.
 function! s:self.start(argv, ...) abort
+
+  let opts = {}
+  if a:0 > 0
+    let opts = a:1
+  endif
+
+  let id = s:id_sequence
+  let s:id_sequence += 1
+  if s:id_sequence >= 2147483390
+    s:id_sequence = 0
+  endif
+
+
   if self.vim_job
 
-    if len(a:000) > 0
-      let opts = a:1
-    else
-      let opts = {}
-    endif
-
-    let id = len(self.jobs) + 1
     let opts.jobpid = id
     let wrapped = self.warp(a:argv, opts)
+
+    " handle cwd
     if has_key(wrapped.opts, 'cwd') && !has('patch-8.0.0902')
       let old_wd = getcwd()
       let cwd = expand(wrapped.opts.cwd, 1)
@@ -93,30 +111,41 @@ function! s:self.start(argv, ...) abort
       call remove(wrapped.opts, 'cwd')
       exe 'cd' fnameescape(cwd)
     endif
+
     let job = job_start(wrapped.argv, wrapped.opts)
+
+    "handle cwd
     if exists('old_wd')
       exe 'cd' fnameescape(old_wd)
     endif
+
     call extend(self.jobs, {id : job})
+
     return id
   else
-    if len(a:000) > 0
-      let opts = a:1
-    else
-      let opts = {}
-    endif
+
+    " handle cwd
     if has_key(opts, 'cwd')
       let old_wd = getcwd()
       let cwd = expand(opts.cwd, 1)
       exe 'cd' fnameescape(cwd)
     endif
+
     let output = self.vim_co.systemlist(a:argv)
+
+    " handle cwd
     if exists('old_wd')
       exe 'cd' fnameescape(old_wd)
     endif
-    let id = -1
+
+
+    call extend(self.jobs, {id : id})
+
+
     let s:self.opts = opts
     if v:shell_error
+
+      " handle stderr
       if has_key(opts,'on_stderr')
         let s:self.job_argv = [id, output, 'stderr']
         try
@@ -126,6 +155,8 @@ function! s:self.start(argv, ...) abort
         endtry
       endif
     else
+
+      " handle stdout
       if has_key(opts,'on_stdout')
         let s:self.job_argv = [id, output, 'stdout']
         try
@@ -135,6 +166,8 @@ function! s:self.start(argv, ...) abort
         endtry
       endif
     endif
+
+    " handle exit
     if has_key(opts,'on_exit')
       let s:self.job_argv = [id, v:shell_error, 'exit']
       try
@@ -143,6 +176,7 @@ function! s:self.start(argv, ...) abort
         doautocmd User SpaceVim_job_exit
       endtry
     endif
+
     return id
   endif
 endfunction
@@ -206,3 +240,6 @@ endfunction
 function! s:self.debug() abort
   echo join(self._message, "\n")
 endfunction
+
+
+

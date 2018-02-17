@@ -103,9 +103,6 @@ call YXVim#api#base#source(s:_current_file_dir.'/completion.vim')
 call YXVim#api#base#source(s:_current_file_dir.'/plugin.vim')
 
 
-call YXVim#api#base#source(s:_current_file_dir.'/job.vim')
-
-
 " call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
 
 
