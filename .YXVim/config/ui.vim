@@ -23,10 +23,24 @@ if has('gui_running')
 endif
 
 
+" Background and Scheme
+set background=dark
+colorscheme desert
+
+" Enable 256 colors on gnome
+if $COLORTERM ==# 'gnome-terminal'
+    set t_Co=256
+endif
+
+
 " indent use backspace delete indent, eol use backspace delete line at
 " begining start delete the char you just typed in if you do not use set
 " nocompatible ,you need this
 set backspace=indent,eol,start
+
+"Allow specified keys that move the cursor left/right to move to
+"the previous/next line when the cursor is on the first/last character in the line.
+"set whichwrap+=<,>,h,l
 
 
 " Shou number and relativenumber
@@ -91,7 +105,7 @@ filetype indent on
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 " please install the font in 'Dotfiles\font'
-if YXVim#api#system#OSX()
+if YXVim#api#system#Windows()
     set guifont=DejaVu_Sans_Mono_for_Powerline:h11:cANSI:qDRAFT
 elseif YXVim#api#system#OSX()
     set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11

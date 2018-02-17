@@ -13,6 +13,7 @@ set tabstop=4
 set expandtab
 set softtabstop=4
 set shiftwidth=4
+"set smarttab  " do not use this
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -90,6 +91,23 @@ set incsearch
 " hightlight search
 set hlsearch
 
+" ignore search
+set ignorecase
+
+" Override the 'ignorecase' option if the search pattern contains upper case characters.
+set smartcase
+
+" Set magic on, for regular expression
+set magic
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Command
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Set how many lines of history VIM commmands has to remember
+set history=700
+
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -110,6 +128,39 @@ set laststatus=2
 
 " When the buffer is discarded (| abandon |), it is kept in memory
 set hidden
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Redraw
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Redraw the screen frequently
+set nolazyredraw
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" File formats
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if YXVim#api#system#Windows()
+    set ffs=unix,dos,mac
+elseif YXVim#api#system#OSX()
+    set ffs=mac,unix,dos
+else
+    set ffs=unix,dos,mac
+endif
+
+" we dont need it, because the vim may set it bydefault according the system
+"set ff=unix
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" No sounds on error
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+"set noerrorbells
+"set novisualbell
+"set t_vb=
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -134,7 +185,6 @@ set ttimeoutlen=50
 if has('patch-7.4.314')
     set shortmess+=c
 endif
-
 
 
 
