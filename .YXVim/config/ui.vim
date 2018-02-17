@@ -10,6 +10,69 @@ let s:_current_file_path = resolve(expand('<sfile>:p'))
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" basic gui config
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if has('gui_running')
+    set guioptions-=m " Hide menu bar.
+    set guioptions-=T " Hide toolbar
+    set guioptions-=L " Hide left-hand scrollbar
+    set guioptions-=r " Hide right-hand scrollbar
+    set guioptions-=b " Hide bottom scrollbar
+    set showtabline=1 " Hide tabline
+    set guioptions+=e " Hide tab
+endif
+
+
+" indent use backspace delete indent, eol use backspace delete line at
+" begining start delete the char you just typed in if you do not use set
+" nocompatible ,you need this
+set backspace=indent,eol,start
+
+
+" Shou number and relativenumber
+set number
+set relativenumber
+
+" set fillchar
+hi VertSplit ctermbg=NONE guibg=NONE
+set fillchars+=vert:│
+
+
+" show cmd on right bottom corner
+"set noshowcmd
+set showcmd
+
+
+" indent
+set autoindent
+set smartindent
+set cindent
+
+
+" show wildmenu
+set wildmenu
+
+
+" do not break words
+" If on, Vim will wrap long lines at a character in
+" 'breakat' rather than at the last character that fits on the screen.
+set linebreak
+
+
+" tab options:
+set tabstop=4
+set expandtab
+set softtabstop=4
+set shiftwidth=4
+
+
+" autoread
+" When a file has been detected to have been changed outside of Vim
+" and it has not been changed inside of Vim
+set autoread
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Highlight current line
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -33,21 +96,26 @@ filetype indent on
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Colors and Fonts
+" Syntax
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-" set encoding that how vim shall represent characters internally
-set encoding=utf-8
-" set encoding that how vim shall writen to file
-set fileencoding=utf-8
-
-scriptencoding utf-8
 
 syntax enable
 syntax on
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Fonts
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" please install the font in 'Dotfiles\font'
+if YXVim#api#system#OSX()
+    set guifont=DejaVu_Sans_Mono_for_Powerline:h11:cANSI:qDRAFT
+elseif YXVim#api#system#OSX()
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h11
+else
+    set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 11
+endif
 
 
 
