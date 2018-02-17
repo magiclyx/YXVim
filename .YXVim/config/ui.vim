@@ -59,23 +59,11 @@ set wildmenu
 set linebreak
 
 
-" tab options:
-set tabstop=4
-set expandtab
-set softtabstop=4
-set shiftwidth=4
-
-
-" autoread
-" When a file has been detected to have been changed outside of Vim
-" and it has not been changed inside of Vim
-set autoread
-
-
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Highlight current line
+" Cursor
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" Hightlight current line and column
 augroup cursor_line
 autocmd!
 autocmd WinLeave * set nocursorline 
@@ -86,6 +74,8 @@ set cursorline
 "set cursorline cursorcolumn
 augroup END
 
+" Minimal number of screen lines to keep above and below the cursor
+set scrolloff=3
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " File type
@@ -94,14 +84,6 @@ filetype on
 filetype plugin on
 filetype indent on
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Syntax
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-syntax enable
-syntax on
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -119,6 +101,10 @@ endif
 
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" Mouse
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+set mouse=nv
 
 
 

@@ -58,11 +58,20 @@ nnoremap <leader>r :call YXVim#api#base#src_reload()<CR>
 " load other configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+" load encoding
+call YXVim#api#base#source(s:_current_file_dir.'/encoding.vim')
+
+" load data
+call YXVim#api#base#source(s:_current_file_dir.'/data.vim')
+
+" load data
+call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
+
 " load ui
 call YXVim#api#base#source(s:_current_file_dir.'/ui.vim')
 
-" load encoding
-call YXVim#api#base#source(s:_current_file_dir.'/encoding.vim')
+" load map
+call YXVim#api#base#source(s:_current_file_dir.'/map.vim')
 
 
 
