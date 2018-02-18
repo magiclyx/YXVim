@@ -5,6 +5,7 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
 " Set the code used inside vim.
 " Do not change the encoding value at run time. That would cause weird mistakes.
 set encoding=utf-8
