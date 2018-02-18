@@ -61,9 +61,19 @@ nnoremap <leader>r :call YXVim#api#base#src_reload()<CR>
 
 
 
+
+function! s:tttt()
+    call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
+endfunction
+
+nnoremap <leader>x :call <SID>tttt()<CR>
+
+
+
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " load other configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
 
 " load base
 call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
@@ -90,7 +100,12 @@ call YXVim#api#base#source(s:_current_file_dir.'/cmd.vim')
 call YXVim#api#base#source(s:_current_file_dir.'/completion.vim')
 
 " load plugin
-call YXVim#api#base#source(s:_current_file_dir.'/pluginn.vim')
+call YXVim#api#base#source(s:_current_file_dir.'/plugin.vim')
 
+
+call YXVim#api#base#source(s:_current_file_dir.'/job.vim')
+
+
+" call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
 
 
