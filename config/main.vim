@@ -32,10 +32,19 @@ let g:Binary_Main_Home = g:Src_Main_Home.'/bin'
 " set user config Home
 let g:Config_User_Home = g:Src_Main_Home.'/.YXVim.d'
 
+" set layer Main Home
+let g:Layer_Main_Home = g:Src_Main_Home.'/layers'
+
 " set data Home
 let g:Data_Home = $HOME.'/.data/vim'
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" setup dir
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if finddir(g:Data_Home) ==# ''
+    silent call mkdir(g:Data_Home)
+endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " extend $PATH environment
@@ -74,35 +83,16 @@ nnoremap <leader>x :call <SID>tttt()<CR>
 " load other configuration
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-
-" load base
-call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
-
-" load encoding
-call YXVim#api#base#source(s:_current_file_dir.'/encoding.vim')
-
-" load data
-call YXVim#api#base#source(s:_current_file_dir.'/data.vim')
-
-" laod buffer
-call YXVim#api#base#source(s:_current_file_dir.'/buffer.vim')
-
-" load editor
-call YXVim#api#base#source(s:_current_file_dir.'/editor.vim')
-
-" load ui
-call YXVim#api#base#source(s:_current_file_dir.'/ui.vim')
-
-" load cmd
-call YXVim#api#base#source(s:_current_file_dir.'/cmd.vim')
-
-" load completion
-call YXVim#api#base#source(s:_current_file_dir.'/completion.vim')
-
 " load plugin
 call YXVim#api#base#source(s:_current_file_dir.'/plugin.vim')
 
 
 " call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
+
+" load main configure
+call YXVim#api#base#source(g:Config_User_Home.'/vimrc')
+
+" load all layers
+call YXVim#api#layer#load()
 
 

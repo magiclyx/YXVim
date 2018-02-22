@@ -5,6 +5,7 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+echom 'ui.vim'
 
 let s:_current_file_path = resolve(expand('<sfile>:p'))
 

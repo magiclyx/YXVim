@@ -46,7 +46,6 @@ let s:max_task_processes = get(g:, 'g:Plugin_Job_Maxprocesses', 8)
 
 
 
-
 function! s:update(...) abort
 
   let plugins = a:0 == 0 ? sort(keys(dein#get())) : sort(copy(a:1))

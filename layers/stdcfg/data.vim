@@ -5,6 +5,8 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+echo 'data.vim'
+
 let g:Data_Buckup_Dir = g:Data_Home.'/buckup'
 let g:Data_Swap_Dir = g:Data_Home.'/swap'
 let g:Data_Undo_Dir = g:Data_Home.'/undofile'

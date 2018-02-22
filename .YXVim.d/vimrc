@@ -1,0 +1,13 @@
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+" Author: Yuxi Liu
+" Version: 2.0 - 01/07/2018 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+let s:_current_file_path = resolve(expand('<sfile>:p'))
+let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
+
+
+
+call YXVim#api#layer#setup('stdcfg', v:true)
