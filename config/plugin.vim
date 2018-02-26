@@ -21,15 +21,38 @@ endif
 
 
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" install dein if need
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+let s:dein_plugin_dir = g:Data_Plugin_Dir . '/repos/github.com/Shougo/dein.vim'
+if ! filereadable(s:dein_plugin_dir . '/README.md')
+	if executable('git')
+        echom 'install dein...'
+        echom 'git clone https://github.com/Shougo/dein.vim ...'
+		call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(expand(s:dein_plugin_dir)))
+        if !empty(v:shell_error)
+          echom ''
+		  echohl WarningMsg
+		  echom v:shell_error
+		  echohl None
+		  execute 'quitall!'
+		endif
+	else
+		echohl WarningMsg
+		echom 'You need install git!'
+		echohl None
+        execute 'quitall!'
+	endif
+endif
+
+exec 'set runtimepath+='. s:dein_plugin_dir
+
+
+
 "if &compatible
 "  set nocompatible
 "endif
 
-
-let s:dein_plugin_dir = g:Support_Main_Home.'/dein'
-
-
-execute 'set runtimepath+='.s:dein_plugin_dir
 
 
 if dein#load_state(g:Data_Plugin_Dir)
@@ -46,6 +69,16 @@ if dein#load_state(g:Data_Plugin_Dir)
   call dein#end()
   call dein#save_state()
 endif
+
+silent! let check_plugin = dein#check_install()
+if check_plugin
+  augroup SpaceVimCheckInstall
+	au!
+	au VimEnter * SPInstall
+  augroup END
+endif
+
+call dein#call_hook('source')
 
 filetype plugin indent on
 
