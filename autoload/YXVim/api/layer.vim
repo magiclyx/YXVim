@@ -23,7 +23,7 @@ function! YXVim#api#layer#setup(name, ...)
         \'should_active' : v:false,
         \'config_file' : 0,
         \'config_dict' : {},
-        \'is_active' : {},
+        \'is_active' : v:false,
         \}
 
   if a:0 >= 1
@@ -83,6 +83,8 @@ function! YXVim#api#layer#activate(state) abort
     call a:state.info.cb_didActive()
   endif
 
+  let a:state.is_active = v:true
+
 endfunction
 
 
@@ -101,6 +103,48 @@ function! YXVim#api#layer#regist(name, info) abort
   let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', 0)
 
 endfunction
+
+
+function! YXVim#api#layer#list_all() abort
+
+  let layers_path_list = globpath(g:Layer_Main_Home, '*', 0, 1)
+  let layers_name_list = []
+
+  for layer_path in layers_path_list
+
+    if ! filereadable(layer_path . '/main.vim')
+      continue
+    endif
+
+	let layer_name = matchstr(layer_path, '^.*/\zs[a-zA-Z0-9_-]*\ze$')
+	if ! empty(layer_name)
+      call add(layers_name_list, layer_name)
+	endif
+  endfor
+
+  return layers_name_list
+endfunction
+
+
+function! YXVim#api#layer#list_setup()
+  return s:OD.keys(s:layers_state)
+endfunction
+
+
+function! YXVim#api#layer#list_activate()
+
+  let layers_name_list = []
+
+  for state in s:OD.values(s:layers_state)
+    if state.is_active == v:true
+      call add(layers_name_list, state.name)
+	endif
+  endfor
+
+  return layers_name_list
+endfunction
+
+
 
 
 
