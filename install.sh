@@ -28,3 +28,5 @@ fi
 
 # compile tellenc
 clang++ -o2 ${SOURCE_PATH}/tellenc/tellenc.cpp -o ${BINARY_PATH}/tellenc
+
+
