@@ -15,6 +15,7 @@ let s:OD = YXVim#lib#import('orderdict')
 let s:layers_state = s:OD.init()
 
 
+
 function! YXVim#api#layer#setup(name, ...)
 
   let state = {
@@ -65,6 +66,10 @@ function! YXVim#api#layer#load() abort
 endfunction
 
 
+function! YXVim#api#layer#find_installer() abort
+endfunction
+
+
 function! YXVim#api#layer#activate(state) abort
 
   if len(a:state.name) == 0
@@ -95,12 +100,16 @@ function! YXVim#api#layer#regist(name, info) abort
   endif
 
   let layer_state = s:OD.get(s:layers_state, a:name, {})
+  if len(layer_state) != 0
+    let layer_state.info.display_name = get(a:info, 'display_name', a:name)
+    let layer_state.info.description = get(a:info, 'description', '')
+    let layer_state.info.active_optional = get(a:info, 'active_optional', {})
+    let layer_state.info.cb_willActive = get(a:info, 'cb_willActive', 0)
+    let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', 0)
+  else
+    echom 'unknown layer:' . a:name
+  endif
 
-  let layer_state.info.display_name = get(a:info, 'display_name', a:name)
-  let layer_state.info.description = get(a:info, 'description', '')
-  let layer_state.info.active_optional = get(a:info, 'active_optional', {})
-  let layer_state.info.cb_willActive = get(a:info, 'cb_willActive', 0)
-  let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', 0)
 
 endfunction
 
