@@ -6,10 +6,20 @@
 " License: MIT license
 "=============================================================================
 
+function! YXVim#lib#vimlib#manager#get() abort
+  return map({
+        \ 'update' : '',
+        \ 'install' : '',
+        \ 'reinstall' : '',
+        \ },
+        \ "function('s:' . v:key)"
+        \ )
+endfunction
+
 " Load SpaceVim api
-let s:VIM_CO = YXVim#lib#neolib#import('compatible')
-let s:JOB = YXVim#lib#neolib#import('job')
-let s:LIST = YXVim#lib#neolib#import('list')
+let s:VIM_CO = YXVim#lib#import('compatible')
+let s:JOB = YXVim#lib#import('job')
+let s:LIST = YXVim#lib#import('list')
 
 
 " init values
@@ -110,13 +120,13 @@ function! s:get_uninstalled_plugins() abort
 endfunction
 
 
-function! YXVim#lib#neolib#manager#reinstall(...)
+function! s:reinstall(...)
   call dein#reinstall(a:1)
 endfunction
 
 
 " @vimlint(EVL102, 1, l:i)
-function! YXVim#lib#neolib#manager#install(...) abort
+function! s:install(...) abort
   if !s:JOB.vim_job && !s:JOB.nvim_job
     let &maxfuncdepth = 2000
   endif
@@ -164,7 +174,7 @@ endfunction
 " @vimlint(EVL102, 0, l:i)
 
 " @vimlint(EVL102, 1, l:i)
-function! YXVim#lib#neolib#manager#update(...) abort
+function! s:update(...) abort
   if !s:JOB.vim_job && !s:JOB.nvim_job
     let &maxfuncdepth = 2000
   endif

@@ -5,12 +5,7 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-function! YXVim#lib#test2()
-    echom "lalal"
-endfunction
-
 let s:apis = {}
-
 let s:has_nvim = has('nvim')
 
 function! YXVim#lib#import(name) abort
@@ -18,24 +13,18 @@ function! YXVim#lib#import(name) abort
     return deepcopy(s:apis[a:name])
   endif
   let p = {}
-"  try
+  try
 
     if s:has_nvim
-      echo 'nvim_get'
-      echo a:name
       let p = YXVim#lib#neolib#{a:name}#get()
-      echo p
     else
-      echo 'vim_get'
-      echo a:name
       let p = YXVim#lib#vimlib#{a:name}#get()
-      echo p
     endif
 
     let s:apis[a:name] = p
-"  catch /^Vim\%((\a\+)\)\=:E117/
-"    echo 'failed'
-"  endtry
+  catch /^Vim\%((\a\+)\)\=:E117/
+    echo 'failed'
+  endtry
 
   return p
 endfunction
