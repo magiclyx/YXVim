@@ -26,9 +26,6 @@ let g:Config_Main_Home = s:_current_file_dir
 " set support Main Home
 let g:Support_Main_Home = g:Config_Main_Home.'/support'
 
-" set binary Main Home
-let g:Binary_Main_Home = g:Src_Main_Home.'/bin'
-
 " set user config Home
 let g:Config_User_Home = g:Src_Main_Home.'/.YXVim.d'
 
@@ -38,18 +35,25 @@ let g:Layer_Main_Home = g:Src_Main_Home.'/layers'
 " set data Home
 let g:Data_Home = $HOME.'/.data/vim'
 
+" set binary Main Home
+let g:App_Main_Home = g:Data_Home.'/bin'
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" setup dir
+" setup data dir
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if finddir(g:Data_Home) ==# ''
     silent call mkdir(g:Data_Home)
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" extend $PATH environment
+" setup app dir
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let $PATH .= g:Binary_Main_Home
+if finddir(g:App_Main_Home) ==# ''
+    silent call mkdir(g:App_Main_Home)
+endif
+
+let $PATH .= g:App_Main_Home
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

@@ -31,7 +31,6 @@ if ! filereadable(s:dein_plugin_dir . '/README.md')
         echom 'git clone https://github.com/Shougo/dein.vim ...'
 		call system('git clone https://github.com/Shougo/dein.vim ' . shellescape(expand(s:dein_plugin_dir)))
         if !empty(v:shell_error)
-          echom ''
 		  echohl WarningMsg
 		  echom v:shell_error
 		  echohl None
