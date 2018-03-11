@@ -61,6 +61,9 @@ function! s:update(...) abort
     call s:upgrdwin.show_window('update', len(plugins))
   endif
 
+  if a:0 == 0
+    call insert(plugins, 'YXVim')
+  endif
 
   let s:current_state = 'update'
   let s:plugins = plugins
@@ -152,7 +155,14 @@ function! s:run_pull_task(times)
     endif
 
     let reponame = s:LIST.shift(s:plugins)
-    let repo = dein#get(reponame)
+    if reponame ==# 'YXVim'
+      let repo = {
+            \'name' : 'YXVim',
+            \'path' : g:Src_Main_Home
+            \}
+    else
+      let repo = dein#get(reponame)
+    endif
     if empty(repo)
       continue
     endif
@@ -197,6 +207,9 @@ endfunction
 function! s:pull(repo) abort
 
   let argv = ['git', 'pull', '--progress']
+
+  echom string(argv)
+  echom string(a:repo.path)
 
   if s:JOB.vim_job || s:JOB.nvim_job
     let jobid = s:JOB.start(argv,{
