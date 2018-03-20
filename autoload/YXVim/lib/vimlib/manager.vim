@@ -108,6 +108,9 @@ function! s:install(...) abort
     call s:upgrdwin.show_window('install', len(s:plugins))
   endif
 
+  if a:0 == 0
+    call insert(plugins, 'YXVim')
+  endif
 
   let s:current_state = 'install'
   let s:plugins = plugins
@@ -158,7 +161,8 @@ function! s:run_pull_task(times)
     if reponame ==# 'YXVim'
       let repo = {
             \'name' : 'YXVim',
-            \'path' : g:Src_Main_Home
+            \'path' : g:Src_Main_Home,
+            \'build' : ['python', g:Config_Main_Home . '/setup.py', '-l', g:Layer_Main_Home, '-b', g:App_Main_Home]
             \}
     else
       let repo = dein#get(reponame)
@@ -191,12 +195,15 @@ function! s:run_clone_task(times)
     endif
 
     let reponame = s:LIST.shift(s:plugins)
-    let repo = dein#get(reponame)
-    if empty(repo)
-      continue
+    if reponame ==# 'YXVim'
+    else
+      let repo = dein#get(reponame)
+      if empty(repo)
+        continue
+      endif
+      call s:clone(repo)
     endif
 
-    call s:clone(repo)
     let trigger_time += 1
   endwhile
 
@@ -207,9 +214,6 @@ endfunction
 function! s:pull(repo) abort
 
   let argv = ['git', 'pull', '--progress']
-
-  echom string(argv)
-  echom string(a:repo.path)
 
   if s:JOB.vim_job || s:JOB.nvim_job
     let jobid = s:JOB.start(argv,{
@@ -317,7 +321,7 @@ endfunction
 
 function! s:on_build_exit(id, data, event) abort
   let repo = s:building_repos[a:id]
-  call remove(s:building_repos, string(id))
+  call remove(s:building_repos, string(a:id))
 
   if a:data == 0
     call s:upgrdwin.build_done(repo.name)
