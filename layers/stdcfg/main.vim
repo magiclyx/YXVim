@@ -11,8 +11,9 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 
 
 
-function! s:did_activity() abort
-  " load base
+function! s:load_configs() abort
+
+  "load base
   call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
 
   " load encoding
@@ -36,7 +37,7 @@ function! s:did_activity() abort
   " load completion
   call YXVim#api#base#source(s:_current_file_dir.'/completion.vim')
 
-  " load completion
+  " load map
   call YXVim#api#base#source(s:_current_file_dir.'/map.vim')
 
 endfunction
@@ -68,8 +69,21 @@ endfunction
 function! s:uninstall() abort
 endfunction
 
+function! s:did_activity() abort
 
-call YXVim#api#layer#regist('stdcfg', {'cb_didActive':function('s:did_activity')})
+  " load configs
+  call s:load_configs()
+
+  " setup menu
+  call YXVim#api#base#source(s:_current_file_dir.'/globalmenu.vim')
+
+endfunction
+
+
+call YXVim#api#layer#regist('stdcfg', 
+      \ {
+        \ 'cb_didActive':function('s:did_activity'),
+      \})
 
 
 

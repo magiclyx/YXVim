@@ -11,6 +11,7 @@ function! YXVim#lib#vimlib#leadermenu#get() abort
           \'create_menu' : '',
           \'set_submenu' : '',
           \'set_command' : '',
+          \'map_globalkeys' : '',
           \},
           \"function('s:' . v:key)"
           \)
@@ -21,6 +22,84 @@ let s:ACTION_SHEET = YXVim#lib#import('actionsheet')
 let s:LIST = YXVim#lib#import('list')
 
 let g:LEADERMENU_HSPACE = 5
+
+
+function! s:create_menu() abort
+  let menu_context = {
+        \ 'type':'leader_menu',
+        \ 'content':{},
+        \ }
+
+  return menu_context
+endfunction
+
+
+function! s:set_submenu(menu, item_name, hotkey, submenu) abort
+  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:submenu.content}
+endfunction
+
+
+function! s:set_command(menu, item_name, hotkey, command) abort
+  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:command}
+endfunction
+
+
+function! s:toggle(menu, title, leader) abort
+
+  let context = {
+                \ 'title' : a:title,
+                \ 'scheme_name' : '',
+                \ 'leader' : a:leader,
+				\ 'items' : a:menu.content,
+				\ 'current_items' : deepcopy(a:menu.content),
+				\ 'path' : [],
+                \ 'is_show_help' : v:false,
+                \ 'looping_list' : [],
+                \ 'is_looping' : v:false,
+                \ 'ctrl_context' : {
+                                   \ 'path_buckup' : v:none,
+                                   \},
+				\ }
+
+  call s:start_buffer(context)
+endfunction
+
+
+function! s:map_globalkeys(menu, leader, unmap_list, ...) abort
+
+  let new_mapping = []
+
+  let key_list = []
+  if a:0 != 0  && type(a:1) == v:t_list
+    let key_list = a:1
+  endif
+
+  for existing_keys in a:unmap_list
+    silent execute 'nunmap ' . leader . existing_keys
+  endfor
+  let unmap_list = []
+
+  if type(a:menu.content) == v:t_string
+
+    let combind_key = ''
+    for key in key_list
+      let combind_key = combind_key . key
+    endfor
+
+    "execute 'nnoremap <nowait> ' . a:leader . combind_key . ' :execute "' . a:menu.content . '"<CR>'
+    execute 'nnoremap <nowait> ' . a:leader . combind_key . ' :call YXVim#api#base#exec_proclaim("' . a:menu.content . '")<CR>'
+    call add(new_mapping, combind_key)
+  elseif type(a:menu.content) == v:t_dict
+
+    for key in keys(a:menu.content)
+      let new_mapping = extend(new_mapping, s:map_globalkeys(a:menu.content[key], a:leader, [], add(copy(key_list), key)))
+    endfor
+
+  endif
+
+  return new_mapping
+
+endfunction
 
 
 function! s:start_buffer(context)
@@ -50,92 +129,6 @@ function! s:start_buffer(context)
 endfunc
 
 
-function! s:create_menu() abort
-  let menu_context = {
-        \ 'type':'leader_menu',
-        \ 'content':{},
-        \ }
-
-  return menu_context
-endfunction
-
-
-function! s:set_submenu(menu, item_name, hotkey, submenu) abort
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:submenu.content}
-endfunction
-
-function! s:set_command(menu, item_name, hotkey, command) abort
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:command}
-endfunction
-
-function! s:test_gottle() abort
-  let lmap = {}
-
-  let lmap['A'] = {'name':'TestA'}
-  let lmap['B'] = {'name':'TestB', 'content':{'A':{'name':'sub_A'}}}
-  "let lmap['B|K'] = {'name':'TestB', 'content':{'A':{'name':'LALAL'}}}
-  let lmap['C'] = {'name':'TestC', 'content':'echom "lala"'}
-  let lmap['D'] = {'name':'TestD'}
-  let lmap['E'] = {'name':'TestE'}
-  let lmap['F'] = {'name':'+TestF'}
-  let lmap['G'] = {'name':'TestG'}
-  let lmap['H'] = {'name':'TestH'}
-  let lmap['I'] = {'name':'TestI'}
-  let lmap['J'] = {'name':'TestJ'}
-  let lmap['K'] = {'name':'TestK'}
-  let lmap['L'] = {'name':'TestL'}
-  let lmap['M'] = {'name':'TestM'}
-  let lmap['N'] = {'name':'TestN'}
-  let lmap['O'] = {'name':'TestO'}
-  let lmap['P'] = {'name':'TestP'}
-  let lmap['Q'] = {'name':'TestQ'}
-  let lmap['R'] = {'name':'TestR'}
-  let lmap['S'] = {'name':'TestS'}
-  let lmap['T'] = {'name':'TestT'}
-  let lmap['U'] = {'name':'TestU'}
-  let lmap['V'] = {'name':'TestV'}
-  let lmap['W'] = {'name':'TestW'}
-  let lmap['X'] = {'name':'TestX'}
-  let lmap['Y'] = {'name':'TestY'}
-  let lmap['Z'] = {'name':'TestZ'}
-
-  let context = {
-                \ 'title' : 'Guide',
-                \ 'name' : 'SPC',
-                \ 'scheme_name' : '',
-				\ 'items' : a:menu.content,
-				\ 'current_items' : deepcopy(a:menu.content),
-				\ 'path' : [],
-                \ 'is_show_help' : v:false,
-                \ 'looping_list' : [],
-                \ 'is_looping' : v:false,
-                \ 'ctrl_context' : {
-                                   \ 'path_buckup' : v:none,
-                                   \},
-				\ }
-
-  call s:start_buffer(context)
-endfunction
-
-function! s:toggle(menu, title) abort
-
-  let context = {
-                \ 'title' : a:title,
-                \ 'scheme_name' : '',
-				\ 'items' : a:menu.content,
-				\ 'current_items' : deepcopy(a:menu.content),
-				\ 'path' : [],
-                \ 'is_show_help' : v:false,
-                \ 'looping_list' : [],
-                \ 'is_looping' : v:false,
-                \ 'ctrl_context' : {
-                                   \ 'path_buckup' : v:none,
-                                   \},
-				\ }
-
-  call s:start_buffer(context)
-endfunc
-
 
 function! s:calc_layout(item_map)
   let ret = {}
@@ -151,6 +144,7 @@ function! s:calc_layout(item_map)
   let ret.win_dim = ret.n_rows
   return ret
 endfunction
+
 
 
 function! s:create_string(layout, item_map)
@@ -266,7 +260,8 @@ function! s:wait_for_input(context)
         doautocmd WinEnter
 
         try
-          unsilent execute content
+          call YXVim#api#base#exec_proclaim(content)
+          "unsilent execute content
         catch
           unsilent echom v:exception
         endtry
@@ -359,6 +354,10 @@ function! s:binding_keys(context)
     execute 'cnoremap <nowait> <silent> <buffer> <esc> <CONTROL>paging_help<CR>'
     execute 'cnoremap <nowait> <silent> <buffer> <c-c> <CONTROL>paging_help<CR>'
 
+    if type(a:context.leader) == v:t_string
+      execute 'cnoremap <nowait> <silent> <buffer> ' . a:context.leader . ' <CONTROL>paging_help<CR>'
+    endif
+
   else
 
     if ! empty(maparg("p", "c", 0, 1))
@@ -379,6 +378,10 @@ function! s:binding_keys(context)
     endfor
 
     execute 'cnoremap <nowait> <silent> <buffer> <c-c> <esc>'
+
+    if type(a:context.leader) == v:t_string
+      execute 'cnoremap <nowait> <silent> <buffer> ' . a:context.leader . ' ' . a:context.leader . '<CR>'
+    endif
 
   endif
 
@@ -504,4 +507,55 @@ function! s:get_status_bar_color_palette(scheme_name) abort
   endif
 
 endfunction
+
+
+function! s:test_gottle() abort
+  let lmap = {}
+
+  let lmap['A'] = {'name':'TestA'}
+  let lmap['B'] = {'name':'TestB', 'content':{'A':{'name':'sub_A'}}}
+  "let lmap['B|K'] = {'name':'TestB', 'content':{'A':{'name':'LALAL'}}}
+  let lmap['C'] = {'name':'TestC', 'content':'echom "lala"'}
+  let lmap['D'] = {'name':'TestD'}
+  let lmap['E'] = {'name':'TestE'}
+  let lmap['F'] = {'name':'+TestF'}
+  let lmap['G'] = {'name':'TestG'}
+  let lmap['H'] = {'name':'TestH'}
+  let lmap['I'] = {'name':'TestI'}
+  let lmap['J'] = {'name':'TestJ'}
+  let lmap['K'] = {'name':'TestK'}
+  let lmap['L'] = {'name':'TestL'}
+  let lmap['M'] = {'name':'TestM'}
+  let lmap['N'] = {'name':'TestN'}
+  let lmap['O'] = {'name':'TestO'}
+  let lmap['P'] = {'name':'TestP'}
+  let lmap['Q'] = {'name':'TestQ'}
+  let lmap['R'] = {'name':'TestR'}
+  let lmap['S'] = {'name':'TestS'}
+  let lmap['T'] = {'name':'TestT'}
+  let lmap['U'] = {'name':'TestU'}
+  let lmap['V'] = {'name':'TestV'}
+  let lmap['W'] = {'name':'TestW'}
+  let lmap['X'] = {'name':'TestX'}
+  let lmap['Y'] = {'name':'TestY'}
+  let lmap['Z'] = {'name':'TestZ'}
+
+  let context = {
+                \ 'title' : 'Guide',
+                \ 'name' : 'SPC',
+                \ 'scheme_name' : '',
+				\ 'items' : a:menu.content,
+				\ 'current_items' : deepcopy(a:menu.content),
+				\ 'path' : [],
+                \ 'is_show_help' : v:false,
+                \ 'looping_list' : [],
+                \ 'is_looping' : v:false,
+                \ 'ctrl_context' : {
+                                   \ 'path_buckup' : v:none,
+                                   \},
+				\ }
+
+  call s:start_buffer(context)
+endfunction
+
 

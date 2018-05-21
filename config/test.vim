@@ -45,7 +45,7 @@ call s:LEADERMENU.set_submenu(menu, 'Y', 'Y', submenu)
 call s:LEADERMENU.set_submenu(menu, 'Z', 'Z', submenu)
 
 
-call s:LEADERMENU.toggle(menu, 'SPC')
+call s:LEADERMENU.toggle(menu, 'SPC', '<Space>')
 
 let s:sheet = submenu
 

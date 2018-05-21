@@ -33,11 +33,6 @@ function! YXVim#api#base#src_open() abort
     call YXVim#api#base#exec_proclaim(':e! '.g:Config_Main_Home.'/main.vim')
 endfunction
 
-" load support script
-function! YXVim#api#base#load_support(name) abort
-    call YXVim#api#base#exec_silent(':source '.g:Support_Main_Home.'/'.a:name)
-endfunction
-
 
 function! YXVim#api#base#test2()
     echom "lalal"
