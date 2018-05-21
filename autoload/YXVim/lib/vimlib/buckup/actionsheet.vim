@@ -12,9 +12,6 @@ function! YXVim#lib#vimlib#actionsheet#get() abort
           \'set_filetype' : '',
           \'set_content' : '',
           \'set_title' : '',
-          \'redraw_if_need' : '',
-          \'lock_redraw' : '',
-          \'unlock_redraw' : '',
           \},
           \"function('s:' . v:key)"
           \)
@@ -53,9 +50,6 @@ function! s:show(pos, string, size, attribute) abort
   " init current_window
   let s:current_window = {}
 
-  " set drawing info
-  let s:current_window.lockdrawing = 0
-
   " set action sheet info
   let s:current_window.position = position
   let s:current_window.opencmd = opencmd
@@ -74,93 +68,51 @@ function! s:show(pos, string, size, attribute) abort
   let s:current_window.buckup.win_num =  winnr()
   let s:current_window.buckup.win_size = winrestcmd()
 
-  call s:lock_redraw()
 
   call s:winopen(s:current_window)
-  call s:set_title(s:current_window.title)
-  call s:set_content(s:current_window.string, s:current_window.size) 
+  call s:set_title(s:current_window, s:current_window.title)
+  call s:set_content(s:current_window, s:current_window.string, s:current_window.size) 
   call s:toggle_hide_cursor(s:current_window)
 
-  call s:unlock_redraw(get(a:attribute, 'redraw_immediately', v:true))
+  "if empty(maparg("<c-c>", "c", 0, 1))
+  "  execute 'cnoremap <nowait> <silent> <buffer> <c-c> <esc>'
+  "endif
 
 endfunction
 
 
 
 
-function! s:set_filetype(filetype, ...)
+function! s:set_filetype(sheet, filetype)
+  let a:sheet.filetype = a:filetype
+  setlocal filetype=a:sheet.filetype
 
-  if type(s:current_window) == v:t_none
-    return
-  endif
-
-  let should_redraw = v:true
-  if a:0 != 0
-    let should_redraw = a:1
-  endif
-
-  let s:current_window.filetype = a:filetype
-  setlocal filetype=s:current_window.filetype
-
-  if s:current_window.filetype != v:none
-    execute 'setlocal filetype=' . s:current_window.filetype
-
-    if should_redraw
-      call s:redraw_if_need()
-    endif
-
+  if a:sheet.filetype != v:none
+    execute 'setlocal filetype=' . a:sheet.filetype
+    "redraw!
   endif
 endfunction
 
 
-function! s:set_content(string, size, ...)
+function! s:set_content(sheet, string, size)
 
-  if type(s:current_window) == v:t_none
-    return
-  endif
-
-  let s:current_window.string = a:string
-  let s:current_window.size = a:size
-
-  let should_redraw = v:true
-  if a:0 != 0
-    let should_redraw = a:1
-  endif
+  let a:sheet.string = a:string
+  let a:sheet.size = a:size
 
   setlocal modifiable
-  noautocmd execute s:current_window.opencmd . ' resize '. a:size
-  silent 1put!=a:string
-  "silent call append(0, a:string)
-  "normal! _dd
-  normal! gg"_dd
+  noautocmd execute a:sheet.opencmd . ' resize '. a:size
+  "silent 1put!=a:string
+  silent call append(0, a:string)
+  normal! _dd
+  "normal! gg"_dd
   setlocal nomodifiable
 
-  if should_redraw
-    call s:redraw_if_need()
-  endif
-
+  "redraw!
 endfunction
 
 
-function! s:set_title(title, ...)
-
-  if type(s:current_window) == v:t_none
-    return
-  endif
-
-  let should_redraw = v:true
-  if a:0 != 0
-    let should_redraw = a:1
-  endif
-
-  let s:current_window.title = a:title
-
-  call s:updateStatusline(s:current_window)
-
-  if should_redraw
-    call s:redraw_if_need()
-  endif
-
+function! s:set_title(sheet, title)
+  call s:updateStatusline(a:sheet)
 endfunction
 
 
@@ -174,7 +126,7 @@ function! s:close()
 
   if s:current_window.win_num == winnr()
     noautocmd close
-    "redraw!
+    redraw!
     execute s:current_window.buckup.win_size
     noautocmd execute s:current_window.buckup.win_num.'wincmd w'
     call winrestview(s:current_window.buckup.win_info)
@@ -192,6 +144,7 @@ function! s:winopen(sheet)
 
   let a:sheet.buf_num = bufnr('%')
   let a:sheet.win_num = winnr()
+  echom 'window number:' . a:sheet.win_num
   autocmd WinLeave <buffer> call s:close()
 
   if a:sheet.filetype != v:none
@@ -203,13 +156,12 @@ function! s:winopen(sheet)
   setlocal nocursorline nocursorcolumn colorcolumn=
   setlocal winfixwidth winfixheight
 
-  call s:redraw_if_need()
-
 endfunction
 
 
 
 function! s:toggle_hide_cursor(sheet) abort
+  return
   if !exists('a:sheet.buckup.cursor')
     let a:sheet.buckup.cursor = ''
   endif
@@ -221,31 +173,11 @@ endfunction
 
 
 function! s:updateStatusline(sheet) abort
-
   if a:sheet.title == v:none
-    let a:sheet.title = ''
+    return
   endif
 
   execute 'setlocal statusline=' . a:sheet.title
-endfunction
-
-function! s:redraw_if_need() abort
-  if s:current_window.lockdrawing == v:false
-    redraw!
-  endif
-endfunction
-
-function! s:lock_redraw() abort
-  let s:current_window.lockdrawing += 1
-endfunction
-
-function! s:unlock_redraw(redraw_immediately) abort
-  if s:current_window.lockdrawing >= 1
-    let s:current_window.lockdrawing -= 1
-    if a:redraw_immediately==v:true  &&  s:current_window.lockdrawing == 0
-      redraw!
-    endif
-  endif
 endfunction
 
 

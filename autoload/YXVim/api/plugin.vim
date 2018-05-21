@@ -5,6 +5,10 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+let s:plugin_list = []
+
 function! YXVim#api#plugin#add(repo)
-  call dein#add(repo)
+  call add(s:plugin_list, repo)
 endfunction
+
+#call dein#add(repo)

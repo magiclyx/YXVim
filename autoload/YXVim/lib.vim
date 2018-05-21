@@ -7,6 +7,7 @@
 
 let s:apis = {}
 let s:internal_apis = {}
+let s:functions = {}
 let s:has_nvim = has('nvim')
 
 function! YXVim#lib#import(name) abort
