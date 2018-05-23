@@ -25,7 +25,7 @@ endif
 
 " Background and Scheme
 set background=dark
-colorscheme desert
+colorscheme gruvbox
 
 " Enable 256 colors on gnome
 if $COLORTERM ==# 'gnome-terminal'
