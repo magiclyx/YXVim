@@ -5,8 +5,14 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+"Install
+"install->run_task   ->clone->on_install_exit   ->build->on_build_exit->on_task_finished
+"
+"Update
+"update ->run_task   ->pull->on_pull_exit       ->build->on_build_exit->on_task_finished
 
-function! YXVim#lib#vimlib#manager#get() abort
+
+function! YXVim#lib#vimlib#update#get() abort
   return map({
         \ 'update' : '',
         \ 'install' : '',
@@ -15,6 +21,7 @@ function! YXVim#lib#vimlib#manager#get() abort
         \ "function('s:' . v:key)"
         \ )
 endfunction
+
 
 
 " Load SpaceVim api
@@ -55,15 +62,16 @@ function! s:update(...) abort
     return
   elseif s:current_state ==# 'update'
     call s:LOGGER.warn(' [SpaceVim] [plugin manager] plugin updating is not finished.', 1)
-    call s:upgrdwin.show_window('update', len(plugins))
+    call s:upgrdwin.show_window('update', len(s:plugins))
     return
   else
+    if a:0 == 0
+      call insert(plugins, 'YXVim')
+    endif
+
     call s:upgrdwin.show_window('update', len(plugins))
   endif
 
-  if a:0 == 0
-    call insert(plugins, 'YXVim')
-  endif
 
   let s:current_state = 'update'
   let s:plugins = plugins
@@ -78,11 +86,11 @@ function! s:update(...) abort
     let old_funcdepth = &maxfuncdepth
     let &maxfuncdepth = 2000
 
-    call s:run_pull_task(1)
+    call s:run_task(1)
 
     let &maxfuncdepth = old_funcdepth
   else
-    call s:run_pull_task(s:max_task_processes)
+    call s:run_task(s:max_task_processes)
   endif
 
 endfunction
@@ -105,12 +113,14 @@ function! s:install(...) abort
     call s:upgrdwin.show_window('install', len(s:plugins))
     return
   else
-    call s:upgrdwin.show_window('install', len(s:plugins))
+
+    if a:0 == 0
+      call insert(plugins, 'YXVim')
+    endif
+
+    call s:upgrdwin.show_window('install', len(plugins))
   endif
 
-  if a:0 == 0
-    call insert(plugins, 'YXVim')
-  endif
 
   let s:current_state = 'install'
   let s:plugins = plugins
@@ -125,11 +135,11 @@ function! s:install(...) abort
     let old_funcdepth = &maxfuncdepth
     let &maxfuncdepth = 2000
 
-    call s:run_clone_task(1)
+    call s:run_task(1)
 
     let &maxfuncdepth = old_funcdepth
   else
-    call s:run_clone_task(s:max_task_processes)
+    call s:run_task(s:max_task_processes)
   endif
 
 endfunction
@@ -140,20 +150,13 @@ function! s:reinstall(...)
 endfunction
 
 
-
-function! s:run_pull_task(times)
+function! s:run_task(times)
 
   let trigger_time = 0
 
   while trigger_time < a:times
-    if empty(s:plugins)
-      if s:total == s:done
-        let s:end_time = reltime()
-        call s:upgrdwin.task_finish(reltime(s:start_time, s:end_time))
-        let s:current_state = 'idle'
-        call s:recache_rtp()
-      endif
 
+    if empty(s:plugins)
       break
     endif
 
@@ -167,40 +170,14 @@ function! s:run_pull_task(times)
     else
       let repo = dein#get(reponame)
     endif
+
     if empty(repo)
       continue
     endif
 
-    call s:pull(repo)
-    let trigger_time += 1
-  endwhile
-
-endfunction
-
-
-function! s:run_clone_task(times)
-
-  let trigger_time = 0
-
-  while trigger_time < a:times
-    if empty(s:plugins)
-      if s:total == s:done
-        let s:end_time = reltime()
-        call s:upgrdwin.task_finish(reltime(s:start_time, s:end_time))
-        let s:current_state = 'idle'
-        call s:recache_rtp()
-      endif
-
-      break
-    endif
-
-    let reponame = s:LIST.shift(s:plugins)
-    if reponame ==# 'YXVim'
-    else
-      let repo = dein#get(reponame)
-      if empty(repo)
-        continue
-      endif
+    if s:current_state ==# 'update'
+      call s:pull(repo)
+    elseif s:current_state ==# 'install'
       call s:clone(repo)
     endif
 
@@ -237,8 +214,12 @@ endfunction
 
 function! s:clone(repo) abort
 
-  let url = 'https://github.com/' . a:repo.repo
-  let argv = ['git', 'clone', '--recursive', '--progress', url, a:repo.path]
+  if a:repo.name ==# 'YXVim'
+    let argv = ['git', 'pull', '--progress']
+  else
+    let url = 'https://github.com/' . a:repo.repo
+    let argv = ['git', 'clone', '--recursive', '--progress', url, a:repo.path]
+  endif
 
   if s:JOB.vim_job || s:JOB.nvim_job
     let jobid = s:JOB.start(argv,{
@@ -297,6 +278,22 @@ function! s:lock_revision(repo) abort
   call s:VIM_CO.system(cmd)
 endfunction
 
+function! s:on_task_finished(repo) abort
+
+  let s:done += 1
+
+  if empty(s:plugins)  &&  s:total == s:done
+    let s:end_time = reltime()
+    call s:upgrdwin.task_finish(reltime(s:start_time, s:end_time))
+    let s:current_state = 'idle'
+    call s:recache_rtp()
+  else
+    call s:run_task(1)
+  endif
+
+endfunction
+
+
 " here if a:data == 0, git pull succeed
 function! s:on_pull_exit(id, data, event) abort
 
@@ -312,8 +309,7 @@ function! s:on_pull_exit(id, data, event) abort
       call s:upgrdwin.download_failed(repo.name, 'E(' . a:data .')')
     endif
 
-    let s:done += 1
-    call s:run_pull_task(1)
+    call s:on_task_finished(repo)
   endif
 
 endfunction
@@ -329,8 +325,8 @@ function! s:on_build_exit(id, data, event) abort
     call s:upgrdwin.build_failed(repo.name)
   endif
 
-  let s:done += 1
-  call s:run_pull_task(1)
+  call s:on_task_finished(repo)
+
 endfunction
 
 
@@ -357,15 +353,16 @@ function! s:on_install_exit(id, data, event) abort
   if !empty(get(repo, 'build', '')) && a:data == 0
     call s:build(repo)
   else
+
     if a:data == 0
       call s:upgrdwin.download_done(repo.name)
     else
       call s:upgrdwin.download_failed(repo.name, 'E(' . a:data .')')
     endif
-  endif
 
-  let s:done += 1
-  call s:run_clone_task(1)
+    call s:on_task_finished(repo)
+
+  endif
 
 endfunction
 

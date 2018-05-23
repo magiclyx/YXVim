@@ -73,7 +73,7 @@ silent! let check_plugin = dein#check_install()
 if check_plugin
   augroup SpaceVimCheckInstall
 	au!
-	au VimEnter * SPInstall
+	au VimEnter * YXInstall
   augroup END
 endif
 
@@ -87,20 +87,20 @@ let g:Plugin_Job_Maxprocesses = 8
 
 command! -nargs=*
       \ -complete=custom,s:complete_plugin
-      \ SPUpdate call <SID>update_plugin(<f-args>)
+      \ YXUpdate call <SID>update_plugin(<f-args>)
 
 " Command for reinstall plugin, support completion of plugin name. 
 command! -nargs=+
       \ -complete=custom,s:complete_plugin
-      \ SPReinstall call <SID>reinstall_plugin(<f-args>)
+      \ YXReinstall call <SID>reinstall_plugin(<f-args>)
 
 " Command for install plugins.
 command! -nargs=* 
       \ -complete=custom,s:complete_plugin
-      \ SPInstall call <SID>install_plugin(<f-args>)
+      \ YXInstall call <SID>install_plugin(<f-args>)
 
 
-let s:manager = YXVim#lib#import('manager')
+let s:update_manager = YXVim#lib#import('update')
 
 
 function! s:complete_plugin(ArgLead, CmdLine, CursorPos) abort
@@ -112,19 +112,19 @@ endfunction
 
 function! s:update_plugin(...) abort
     if a:0 == 0
-      call s:manager.update()
+      call s:update_manager.update()
     else
-      call s:manager.update(a:000)
+      call s:update_manager.update(a:000)
     endif
 endfunction
 
 function! s:reinstall_plugin(...) abort
-  call s:manager.reinstall(a:000)
+  call s:update_manager.reinstall(a:000)
 endfunction
 
 function! s:install_plugin(...) abort
     if a:0 == 0
-      call s:manager.install()
+      call s:update_manager.install()
     else
       call dein#install(a:000)
     endif

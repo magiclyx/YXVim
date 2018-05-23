@@ -74,13 +74,21 @@ function! s:refresh_title() abort
   let s:window_bar = ''
 
   if s:window.type ==# 'install'
-    let s:window_title = 'Installing plugins (' . s:window.done . '/' . s:window.total . ')'
+
+    if s:window.finished  &&  !empty(s:window.elapsed)
+      let s:window_title = 'Installed. Elapsed time: ' . split(reltimestr(s:window.elapsed))[0] . ' sec.'
+    else
+      let s:window_title = 'Installing plugins (' . s:window.done . '/' . s:window.total . ')'
+    endif
+
   elseif s:window.type ==# 'update'
+
     if s:window.finished  &&  !empty(s:window.elapsed)
       let s:window_title = 'Updated. Elapsed time: ' . split(reltimestr(s:window.elapsed))[0] . ' sec.'
     else
       let s:window_title = 'Updating plugins (' . s:window.done . '/' . s:window.total . ')'
     endif
+
   else
     throw 'unknown windows type ' . s:window.type
   endif
@@ -184,7 +192,6 @@ function! s:download_process(name, status) abort
   else
     throw 'unknown windows type ' . s:window.type
   endif
-
 
   call s:listbuff.set_line(s:window.buff, s:window.plugins[a:name], line_msg)
   call s:refresh_title()

@@ -30,7 +30,7 @@ function! s:create_buff(name, ...) abort
     return s:bufs[a:name]
   endif
 
-  let s:buff = {
+  let buff = {
         \'name' : a:name,
         \'buff' : 0,
         \'type' : 0,
@@ -40,12 +40,14 @@ function! s:create_buff(name, ...) abort
         \}
 
   if a:0 > 0  &&  type(a:1) == v:t_dict
-    let s:buff['win_cmd'] = get(a:1, 'win_cmd', s:buff.win_cmd)
-    let s:buff['file_type'] = get(a:1, 'file_type', s:buff.file_type)
+    let buff['win_cmd'] = get(a:1, 'win_cmd', buff.win_cmd)
+    let buff['file_type'] = get(a:1, 'file_type', buff.file_type)
   endif
 
+  echom string(type(s:bufs))
+  let s:bufs[a:name] = buff
 
-  return s:buff
+  return buff
 
 endfunction
 
