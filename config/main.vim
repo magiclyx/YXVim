@@ -90,6 +90,8 @@ nnoremap <leader>x :call <SID>tttt()<CR>
 " load main configure
 call YXVim#api#base#source(g:Config_User_Home.'/vimrc')
 
+" load all layers
+call YXVim#api#layer#load()
 
 " load plugin
 call YXVim#api#base#source(g:Config_Main_Home.'/plugin.vim')
@@ -100,8 +102,6 @@ call YXVim#api#base#source(g:Config_Main_Home.'/globalmenu.vim')
 
 " call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
 
-" load all layers
-call YXVim#api#layer#load()
 
 " load quick menu
 call YXVim#api#base#source(g:Config_Main_Home.'/quickmenu.vim')

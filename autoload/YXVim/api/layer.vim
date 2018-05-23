@@ -20,7 +20,13 @@ function! YXVim#api#layer#setup(name, ...)
 
   let state = {
         \'name' : a:name,
-        \'info' : {},
+        \'info' : {
+            \'display_name':'unknown',
+            \'description':'',
+            \'active_optional':{},
+            \'cb_willActive': v:none,
+            \'cb_didActive': v:none,
+        \},
         \'should_active' : v:false,
         \'config_file' : 0,
         \'config_dict' : {},
@@ -78,13 +84,13 @@ function! YXVim#api#layer#activate(state) abort
 
   let plugin_dir = g:Layer_Main_Home . '/' . a:state.name
   
-  if type(a:state.info.cb_willActive) == v:t_func
+  if !empty(a:state)  &&  type(a:state.info.cb_willActive) == v:t_func
     call a:state.info.cb_willActive()
   endif
 
   execute 'set runtimepath+='.plugin_dir
 
-  if type(a:state.info.cb_didActive) == v:t_func
+  if !empty(a:state)  &&  type(a:state.info.cb_didActive) == v:t_func
     call a:state.info.cb_didActive()
   endif
 
@@ -102,10 +108,11 @@ function! YXVim#api#layer#regist(name, info) abort
   let layer_state = s:OD.get(s:layers_state, a:name, {})
   if len(layer_state) != 0
     let layer_state.info.display_name = get(a:info, 'display_name', a:name)
-    let layer_state.info.description = get(a:info, 'description', '')
-    let layer_state.info.active_optional = get(a:info, 'active_optional', {})
-    let layer_state.info.cb_willActive = get(a:info, 'cb_willActive', 0)
-    let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', 0)
+    let layer_state.info.description = get(a:info, 'description', layer_state.info.description)
+    let layer_state.info.active_optional = get(a:info, 'active_optional', layer_state.info.active_optional)
+    let layer_state.info.cb_willActive = get(a:info, 'cb_willActive', layer_state.info.cb_willActive)
+    let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', layer_state.info.cb_didActive)
+    let s:layers_state[a:name] = layer_state
   else
     echom 'unknown layer:' . a:name
   endif

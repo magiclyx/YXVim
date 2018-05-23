@@ -8,7 +8,11 @@
 let s:plugin_list = []
 
 function! YXVim#api#plugin#add(repo)
-  call add(s:plugin_list, repo)
+  call add(s:plugin_list, a:repo)
 endfunction
 
-#call dein#add(repo)
+function! YXVim#api#plugin#get_all()
+  return s:plugin_list
+endfunction
+
+"call dein#add(repo)
