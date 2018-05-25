@@ -11,7 +11,8 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 
 
 
-function! s:load_configs() abort
+
+function! s:did_activity() abort
 
   "load base
   call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
@@ -39,16 +40,6 @@ function! s:load_configs() abort
 
   " load map
   call YXVim#api#base#source(s:_current_file_dir.'/map.vim')
-
-endfunction
-
-function! s:did_activity() abort
-
-  " load configs
-  call s:load_configs()
-
-  " setup menu
-  call YXVim#api#base#source(s:_current_file_dir.'/globalmenu.vim')
 
 endfunction
 
