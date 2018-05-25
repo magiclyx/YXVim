@@ -14,8 +14,8 @@ call g:quickmenu#reset()
 " bind to F12
 "noremap <silent><F2> :call quickmenu#toggle(0)<cr>
 "noremap <F2> :call quickmenu#bottom(0)<cr>
-noremap <F2> :call quickmenu#toggle(0)<cr>
-noremap <F3> :call testmenu#toggle(0)<cr>
+"noremap <F2> :call quickmenu#toggle(0)<cr>
+"noremap <F3> :call testmenu#toggle(0)<cr>
 
 " set Header
 call g:quickmenu#header('Test Header')

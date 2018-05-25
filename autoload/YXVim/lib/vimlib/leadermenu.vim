@@ -315,7 +315,7 @@ function! s:create_status_line(context) abort
 
   let path_string = ''
   for path_dict in a:context.path
-    let path_string = printf(' > %s[%s]%s', path_string, s:escape_keys(path_dict.key), path_dict.name)
+    let path_string = printf(' %s > [%s]%s', path_string, s:escape_keys(path_dict.key), path_dict.name)
   endfor
 
   

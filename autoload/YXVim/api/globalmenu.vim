@@ -5,10 +5,13 @@
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-let s:global_menu = v:none
 
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
+let s:plugin_key = 'p'
+let s:plugin_name = 'plugin'
 
+
+let s:global_menu = v:none
 function! YXVim#api#globalmenu#getmenu() abort
   if type(s:global_menu) == v:t_none
     let s:global_menu = s:LEADERMENU.create_menu()
@@ -18,19 +21,49 @@ function! YXVim#api#globalmenu#getmenu() abort
 endfunction
 
 
+"let s:global_plugin_menu = v:none
+"function! YXVim#api#globalmenu#getpluginmenu() abort
+"  if type(s:global_plugin_menu) == v:t_none
+"    let s:global_plugin_menu = s:LEADERMENU.create_menu()
+"  endif
+"
+"  return s:global_plugin_menu
+"endfunction
+
+
 function! YXVim#api#globalmenu#toggle(title, leader) abort
-  call s:LEADERMENU.toggle(YXVim#api#globalmenu#getmenu(), a:title, a:leader)
+
+  let menu = YXVim#api#globalmenu#getmenu()
+"  let plugin_menu = YXVim#api#globalmenu#getpluginmenu()
+"
+"  if ! empty(plugin_menu.content)  &&  ! has_key(plugin_menu.content, s:plugin_key)
+"    call s:LEADERMENU.set_submenu(s:global_menu, s:plugin_name, s:plugin_key, plugin_menu)
+"  elseif empty(plugin_menu.content)  &&  has_key(plugin_menu.content, s:plugin_key)
+"    call remove(menu.content, s:plugin_key)
+"  endif
+
+  call s:LEADERMENU.toggle(menu, a:title, a:leader)
+
 endfunction
 
 
 function! YXVim#api#globalmenu#set_submenu(menu_name, hotkey, submenu)
-  call s:LEADERMENU.set_submenu(s:global_menu, a:menu_name, a:hotkey, a:submenu)
+  if a:hotkey == s:plugin_key
+    throw 'Hotkey "'. a:hotkey .'" is reserved for plugins. You cannot use this.'
+  endif
+
+  call s:LEADERMENU.set_submenu(YXVim#api#globalmenu#getmenu(), a:menu_name, a:hotkey, a:submenu)
   call YXVim#api#globalmenu#reset_leader_if_need()
 endfunction
 
 
 function! YXVim#api#globalmenu#set_command(command_name, hotkey, command)
-  call s:LEADERMENU.set_command(s:global_menu, a:command_name, a:hotkey, a:command)
+
+  if a:hotkey == s:plugin_key
+    throw 'Hotkey "'. a:hotkey .'" is reserved for plugins. You cannot use this.'
+  endif
+
+  call s:LEADERMENU.set_command(YXVim#api#globalmenu#getmenu(), a:command_name, a:hotkey, a:command)
   call YXVim#api#globalmenu#reset_leader_if_need()
 endfunction
 

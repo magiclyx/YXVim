@@ -38,6 +38,8 @@ let g:Data_Home = $HOME.'/.data/vim'
 " set binary Main Home
 let g:App_Main_Home = g:Data_Home.'/bin'
 
+" store main home
+let g:App_Support_Home = g:Data_Home.'/support'
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " setup data dir
@@ -54,6 +56,15 @@ if finddir(g:App_Main_Home) ==# ''
 endif
 
 let $PATH .= g:App_Main_Home
+
+
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" setup app support dir
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+if finddir(g:App_Support_Home) ==# ''
+    silent call mkdir(g:App_Support_Home)
+endif
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

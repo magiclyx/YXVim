@@ -26,6 +26,7 @@ function! YXVim#api#layer#setup(name, ...)
             \'active_optional':{},
             \'cb_willActive': v:none,
             \'cb_didActive': v:none,
+            \'cb_freshmenu': v:none,
         \},
         \'should_active' : v:false,
         \'config_file' : 0,
@@ -72,8 +73,43 @@ function! YXVim#api#layer#load() abort
 endfunction
 
 
-function! YXVim#api#layer#find_installer() abort
-endfunction
+
+
+"function! YXVim#api#layer#fresh_menu() abort
+"
+"  " load plugin menu
+"  let plugin_menu = YXVim#api#globalmenu#getpluginmenu()
+"  for state in s:OD.values(s:layers_state)
+"    if len(a:state.name) == 0
+"      throw 'invalidate plugin state'
+"    endif
+"
+"    if !empty(a:state)  &&  type(a:state.info.cb_freshmenu) == v:t_func
+"      call a:state.info.cb_freshmenu(plugin_menu, bufname('%'), 'plugin')
+"    endif
+"
+"  endfor
+"
+"
+"
+"  " load global menu
+"  let global_menu = YXVim#api#globalmenu#getmenu()
+"  for state in s:OD.values(s:layers_state)
+"    if len(a:state.name) == 0
+"      throw 'invalidate plugin state'
+"    endif
+"
+"    if !empty(a:state)  &&  type(a:state.info.cb_freshmenu) == v:t_func
+"      call a:state.info.cb_freshmenu(plugin_menu, bufname('%'), 'global')
+"    endif
+"
+"  endfor
+"  
+"
+"
+"endfunction
+
+
 
 
 function! YXVim#api#layer#activate(state) abort
@@ -112,6 +148,7 @@ function! YXVim#api#layer#regist(name, info) abort
     let layer_state.info.active_optional = get(a:info, 'active_optional', layer_state.info.active_optional)
     let layer_state.info.cb_willActive = get(a:info, 'cb_willActive', layer_state.info.cb_willActive)
     let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', layer_state.info.cb_didActive)
+    let layer_state.info.cb_freshmenu = get(a:info, 'cb_freshmenu', layer_state.info.cb_freshmenu)
     let s:layers_state[a:name] = layer_state
   else
     echom 'unknown layer:' . a:name

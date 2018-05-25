@@ -53,6 +53,16 @@ endfunction
 
 
 
+function! YXVim#api#base#getAppSupportPath(app_name) abort
+  let app_support_path = g:App_Support_Home.'/'.a:app_name
+
+  if finddir(app_support_path) ==# ''
+      silent call mkdir(app_support_path)
+  endif
+
+  return app_support_path
+
+endfunction
 
 
 

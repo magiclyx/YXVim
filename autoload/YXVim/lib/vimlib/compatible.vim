@@ -6,6 +6,7 @@ function! YXVim#lib#vimlib#compatible#get() abort
         \ 'version' : '',
         \ 'has' : '',
         \ 'globpath' : '',
+        \ 'has_shell_command' : '',
         \ },
         \ "function('s:' . v:key)"
         \ )
@@ -141,3 +142,20 @@ function! s:has(feature) abort
 endfunction
 
 " vim:set et sw=2 cc=80:
+"
+
+function! s:has_shell_command(command) abort
+
+  if YXVim#api#system#OSX()
+    return ! matchstr(system('hash '.a:command.'; echo $?'), '\d')
+  elseif YXVim#api#system#Linux()
+    return ! matchstr(system('hash '.a:command.'; echo $?'), '\d')
+  elseif YXVim#api#system#Windows()
+  else
+    return ! matchstr(system('hash '.a:command.'; echo $?'), '\d')
+  endif
+
+endfunction
+
+
+

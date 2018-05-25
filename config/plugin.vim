@@ -60,7 +60,6 @@ if dein#load_state(g:Data_Plugin_Dir)
   call dein#add(s:dein_plugin_dir)
 
   let all_plugin_list = YXVim#api#plugin#get_all()
-  echom string(all_plugin_list)
   for plugin in all_plugin_list
     call dein#add(plugin)
   endfor
@@ -111,7 +110,6 @@ let s:update_manager = YXVim#lib#import('update')
 
 
 function! s:complete_plugin(ArgLead, CmdLine, CursorPos) abort
-  echom "abcdefg"
   echom join(keys(dein#get()) + ['SpaceVim'], "\n")
   return join(keys(dein#get()) + ['SpaceVim'], "\n")
 endfunction

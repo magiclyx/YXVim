@@ -66,7 +66,20 @@ let g:fencview_autodetect = 1
 
 
 
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" add Encoding menu
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+
+let s:LEADERMENU = YXVim#lib#import('leadermenu')
+
+
+"create encoding menu
+let s:encoding_menu = s:LEADERMENU.create_menu()
+
+"add encoding view
+call s:LEADERMENU.set_command(s:encoding_menu, 'toggle view', 't', 'FencView')
+call YXVim#api#globalmenu#set_submenu('Encoding', 'e', s:encoding_menu)
 
 
 
