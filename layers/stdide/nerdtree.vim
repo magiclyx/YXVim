@@ -136,7 +136,6 @@ endfunction
 " past file to xclip clipboard
 function! s:paste_to_file_manager() abort
   let path = g:NERDTreeFileNode.GetSelected().path.str()
-  echom "<-" . path
   if !isdirectory(path)
     let path = fnamemodify(path, ':p:h')
   endif
@@ -150,18 +149,27 @@ function! s:paste_to_file_manager() abort
   endif
 endfunction
 
+" open select item
+"let s:VCOP = YXVim#lib#import('compatible')
+function! s:open_select_item() abort
+  let filepath = g:NERDTreeFileNode.GetSelected().path.str()
+  "echom filepath
+  call s:VCOP.open(filepath)
+endfunction
+
 " copy file to xclip clipboard
 function! s:copy_to_system_clipboard() abort
   let filename = g:NERDTreeFileNode.GetSelected().path.str()
-  echom "->" . filename
   call s:VCOP.systemlist(['xclip-copyfile', filename])
   echo 'Yanked:' . (type(filename) == 3 ? len(filename) : 1 ) . ( isdirectory(filename) ? 'directory' : 'file'  )
 endfunction
 
 
 function! s:nerdtreeinit() abort
+  " use pbcopy & pbpaste instead
   nnoremap <silent><buffer> yY  :<C-u>call <SID>copy_to_system_clipboard()<CR>
   nnoremap <silent><buffer> P  :<C-u>call <SID>paste_to_file_manager()<CR>
+  nnoremap <silent><buffer> E  :<C-u>call <SID>open_select_item()<CR>
 endfunction
 
 

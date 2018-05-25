@@ -7,6 +7,7 @@ function! YXVim#lib#vimlib#compatible#get() abort
         \ 'has' : '',
         \ 'globpath' : '',
         \ 'has_shell_command' : '',
+        \ 'open' : '',
         \ },
         \ "function('s:' . v:key)"
         \ )
@@ -159,3 +160,16 @@ endfunction
 
 
 
+function! s:open(path) abort
+
+  if YXVim#api#system#OSX()
+    call s:system('open ' . a:path)
+  elseif YXVim#api#system#Linux()
+    throw 'not support'
+  elseif YXVim#api#system#Windows()
+    throw 'not support'
+  else
+    throw 'not support'
+  endif
+
+endfunction
