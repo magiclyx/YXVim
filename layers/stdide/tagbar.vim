@@ -32,8 +32,12 @@ function! s:ChompedSystem( ... )
     return substitute(call('system', a:000), '\n\+$', '', '')
 endfunction
 
-let s:ctags_path=s:ChompedSystem('brew --prefix ctags')
 
+"Preferred use brew download ctags, mac comes ctags is modified
+let s:ctags_path=s:ChompedSystem('brew --prefix ctags')
+if len(s:ctags_path) > 0
+  let g:tagbar_ctags_bin = system('which ctags')
+endif
 
 if len(s:ctags_path) > 0
   let g:tagbar_ctags_bin = s:ctags_path.'/bin/ctags'

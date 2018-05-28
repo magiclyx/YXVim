@@ -50,8 +50,8 @@ call YXVim#api#base#source(s:_current_file_dir.'/src/fencview/fencview.vim')
 " If you still want to use  the detection mechanism of this script, set the value to "fencview".
 let $FENCVIEW_TELLENC = 'tellenc'
 
-" set auto detect file encoding when you open a file.
-let g:fencview_autodetect = 1
+" do not auto detect file encoding when you open a file.
+let g:fencview_autodetect = 0
 
 
 " let g:fencview_auto_patterns = ?
@@ -78,7 +78,8 @@ let s:LEADERMENU = YXVim#lib#import('leadermenu')
 let s:encoding_menu = s:LEADERMENU.create_menu()
 
 "add encoding view
-call s:LEADERMENU.set_command(s:encoding_menu, 'toggle view', 't', 'FencView')
+call s:LEADERMENU.set_command(s:encoding_menu, 'toggle view', 'v', 'FencView')
+call s:LEADERMENU.set_command(s:encoding_menu, 'test encoding', 't', 'FencAutoDetect')
 call YXVim#api#globalmenu#set_submenu('Encoding', 'e', s:encoding_menu)
 
 
