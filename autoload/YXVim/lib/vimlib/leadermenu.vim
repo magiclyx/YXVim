@@ -26,21 +26,46 @@ let g:LEADERMENU_HSPACE = 5
 
 function! s:create_menu() abort
   let menu_context = {
-        \ 'type':'leader_menu',
+        \ 'isa':'leader_menu',
         \ 'content':{},
+        \ 'type':'unknown',
         \ }
 
   return menu_context
 endfunction
 
 
-function! s:set_submenu(menu, item_name, hotkey, submenu) abort
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:submenu.content}
+function! s:create_cheatsheet() abort
+  let cheatsheet_context = {
+        \ 'isa':'leader_cheatsheet',
+        \ 'cheat_list':[],
+        \ }
+
+  return menu_context
 endfunction
 
 
-function! s:set_command(menu, item_name, hotkey, command) abort
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:command}
+
+function! s:add_item_to_cheatsheet(cheatsheet, title, text)
+    call s:LIST.push(a:cheatsheet.cheat_list, {'title':a:title, 'text':a:text})
+endfunction
+
+
+function! s:set_submenu(menu, item_name, hotkey, submenu) abort "submenu is a dict created by create_menu function
+  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:submenu.content, 'type':'menu'}
+endfunction
+
+
+function! s:set_command(menu, item_name, hotkey, command) abort "command is a string
+  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:command, 'type':'command'}
+endfunction
+
+function! s:set_cheetsheet(menu, item_name, hotkey, cheetsheet) abort "cheetsheet is list, each item is a line
+  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:cheetsheet, 'type':'cheetsheet'}
+endfunction
+
+function! s:set_text(menu, item_name, hotkey, text) abort "text is a list, each item is a page
+  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:text, 'type':'text'}
 endfunction
 
 
@@ -79,22 +104,31 @@ function! s:map_globalkeys(menu, leader, unmap_list, ...) abort
   endfor
   let unmap_list = []
 
-  if type(a:menu.content) == v:t_string
+  if a:menu.type ==# 'command'
+  endif
 
-    let combind_key = ''
-    for key in key_list
-      let combind_key = combind_key . key
-    endfor
+  if a:menu.type ==# 'command'
+    if type(a:menu.content) == v:t_string
 
-    "execute 'nnoremap <nowait> ' . a:leader . combind_key . ' :execute "' . a:menu.content . '"<CR>'
-    execute 'nnoremap <nowait> ' . a:leader . combind_key . ' :call YXVim#api#base#exec_proclaim("' . a:menu.content . '")<CR>'
-    call add(new_mapping, combind_key)
-  elseif type(a:menu.content) == v:t_dict
+      let combind_key = ''
+      for key in key_list
+        let combind_key = combind_key . key
+      endfor
 
-    for key in keys(a:menu.content)
-      let new_mapping = extend(new_mapping, s:map_globalkeys(a:menu.content[key], a:leader, [], add(copy(key_list), key)))
-    endfor
+      "execute 'nnoremap <nowait> ' . a:leader . combind_key . ' :execute "' . a:menu.content . '"<CR>'
+      execute 'nnoremap <nowait> ' . a:leader . combind_key . ' :call YXVim#api#base#exec_proclaim("' . a:menu.content . '")<CR>'
+      call add(new_mapping, combind_key)
+    endif
+  elseif a:menu.type ==# 'menu'
+    if type(a:menu.content) == v:t_dict
 
+      for key in keys(a:menu.content)
+        let new_mapping = extend(new_mapping, s:map_globalkeys(a:menu.content[key], a:leader, [], add(copy(key_list), key)))
+      endfor
+
+    endif
+  else
+    "do nothing here
   endif
 
   return new_mapping
