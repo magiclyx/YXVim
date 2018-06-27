@@ -117,11 +117,12 @@ set magic
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " File formats
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" NOTE: mac optional just support Mac OS version 9 and earlier
 if YXVim#api#system#Windows()
     set ffs=unix,dos,mac
 elseif YXVim#api#system#OSX()
-    "set ffs=unix,dos,mac
-    set ffs=mac,unix,dos
+    "set ffs=mac,unix,dos
+    set ffs=unix,dos,mac
 else
     set ffs=unix,dos,mac
 endif
