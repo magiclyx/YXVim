@@ -9,11 +9,11 @@ import shutil
 class StdIdeInstaller(installer.YXVimInstaller):
 
     def __init__(self, name):
-        super(StdCfgInstaller, self).__init__(name)
+        super(StdIdeInstaller, self).__init__(name)
 
     def install(self):
         src_path = os.path.join(os.path.dirname(__file__), 'src', 'ctags', '.ctags')
-        dst_path = os.path.abspath('~/.ctags')
+        dst_path = os.path.expanduser('~/.ctags')
 
         if os.access(dst_path, os.R_OK):
             self.uninstall()
