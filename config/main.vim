@@ -102,7 +102,7 @@ nnoremap <leader>x :call <SID>tttt()<CR>
 call YXVim#api#base#source(g:Config_User_Home.'/vimrc')
 
 " load all layers
-call YXVim#api#layer#load()
+call YXVim#api#layer#load_all()
 
 " load plugin
 call YXVim#api#base#source(g:Config_Main_Home.'/plugin.vim')
@@ -110,12 +110,15 @@ call YXVim#api#base#source(g:Config_Main_Home.'/plugin.vim')
 " load global menu
 call YXVim#api#base#source(g:Config_Main_Home.'/globalmenu.vim')
 
+" active all layers
+call YXVim#api#layer#active_all()
+
 
 " call YXVim#api#base#source(s:_current_file_dir.'/test.vim')
 
 
-" load quick menu
-call YXVim#api#base#source(g:Config_Main_Home.'/quickmenu.vim')
+" load quick menu(测试用)
+" call YXVim#api#base#source(g:Config_Main_Home.'/quickmenu.vim')
 
 " map all global menu key in nnoremap
 call YXVim#api#globalmenu#mapping_all_keys()

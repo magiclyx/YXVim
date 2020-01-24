@@ -42,7 +42,7 @@ function! s:verify_support_app() abort
 endfunction
 
 
-function! s:did_activity() abort
+function! s:cb_load() abort
 
   call s:verify_support_app()
 
@@ -60,7 +60,7 @@ endfunction
 
 call YXVim#api#layer#regist('stdide', 
       \ {
-        \ 'cb_didActive':function('s:did_activity'),
+        \ 'cb_load':function('s:cb_load'),
       \})
 
 

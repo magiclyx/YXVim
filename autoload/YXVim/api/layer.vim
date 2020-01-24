@@ -24,8 +24,8 @@ function! YXVim#api#layer#setup(name, ...)
             \'display_name':'unknown',
             \'description':'',
             \'active_optional':{},
-            \'cb_willActive': v:none,
-            \'cb_didActive': v:none,
+            \'cb_load': v:none,
+            \'cb_active': v:none,
             \'cb_freshmenu': v:none,
         \},
         \'should_active' : v:false,
@@ -58,14 +58,14 @@ endfunction
 
 
 
-function! YXVim#api#layer#load() abort
+function! YXVim#api#layer#load_all() abort
 
   for state in s:OD.values(s:layers_state)
     let file_path = g:Layer_Main_Home . '/' . state.name . '/main.vim'
     call YXVim#api#base#source(file_path)
 
     if state.should_active
-      call YXVim#api#layer#activate(state)
+      call YXVim#api#layer#load(state)
     endif
 
   endfor
@@ -74,6 +74,19 @@ endfunction
 
 
 
+function! YXVim#api#layer#active_all() abort
+
+  for state in s:OD.values(s:layers_state)
+    let file_path = g:Layer_Main_Home . '/' . state.name . '/main.vim'
+    call YXVim#api#base#source(file_path)
+
+    if state.should_active
+      call YXVim#api#layer#active(state)
+    endif
+
+  endfor
+
+endfunction
 
 "function! YXVim#api#layer#fresh_menu() abort
 "
@@ -120,14 +133,29 @@ function! YXVim#api#layer#activate(state) abort
 
   let plugin_dir = g:Layer_Main_Home . '/' . a:state.name
   
-  if !empty(a:state)  &&  type(a:state.info.cb_willActive) == v:t_func
-    call a:state.info.cb_willActive()
-  endif
-
   execute 'set runtimepath+='.plugin_dir
 
-  if !empty(a:state)  &&  type(a:state.info.cb_didActive) == v:t_func
-    call a:state.info.cb_didActive()
+  if !empty(a:state)  &&  type(a:state.info.cb_active) == v:t_func
+    call a:state.info.cb_active()
+  endif
+
+  let a:state.is_active = v:true
+
+endfunction
+
+
+function! YXVim#api#layer#load(state) abort
+
+  if len(a:state.name) == 0
+    throw 'invalidate plugin state'
+  endif
+
+  let plugin_dir = g:Layer_Main_Home . '/' . a:state.name
+  
+  execute 'set runtimepath+='.plugin_dir
+
+  if !empty(a:state)  &&  type(a:state.info.cb_load) == v:t_func
+    call a:state.info.cb_load()
   endif
 
   let a:state.is_active = v:true
@@ -146,14 +174,13 @@ function! YXVim#api#layer#regist(name, info) abort
     let layer_state.info.display_name = get(a:info, 'display_name', a:name)
     let layer_state.info.description = get(a:info, 'description', layer_state.info.description)
     let layer_state.info.active_optional = get(a:info, 'active_optional', layer_state.info.active_optional)
-    let layer_state.info.cb_willActive = get(a:info, 'cb_willActive', layer_state.info.cb_willActive)
-    let layer_state.info.cb_didActive = get(a:info, 'cb_didActive', layer_state.info.cb_didActive)
+    let layer_state.info.cb_load = get(a:info, 'cb_load', layer_state.info.cb_load)
+    let layer_state.info.cb_active = get(a:info, 'cb_active', layer_state.info.cb_willActive)
     let layer_state.info.cb_freshmenu = get(a:info, 'cb_freshmenu', layer_state.info.cb_freshmenu)
     let s:layers_state[a:name] = layer_state
   else
     echom 'unknown layer:' . a:name
   endif
-
 
 endfunction
 

@@ -12,7 +12,7 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 
 
 
-function! s:did_activity() abort
+function! s:cb_load() abort
 
   "load base
   call YXVim#api#base#source(s:_current_file_dir.'/base.vim')
@@ -46,7 +46,7 @@ endfunction
 
 call YXVim#api#layer#regist('stdcfg', 
       \ {
-        \ 'cb_didActive':function('s:did_activity'),
+        \ 'cb_load':function('s:cb_load'),
       \})
 
 
