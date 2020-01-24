@@ -125,7 +125,7 @@ endfunction
 
 
 
-function! YXVim#api#layer#activate(state) abort
+function! YXVim#api#layer#active(state) abort
 
   if len(a:state.name) == 0
     throw 'invalidate plugin state'
@@ -175,7 +175,7 @@ function! YXVim#api#layer#regist(name, info) abort
     let layer_state.info.description = get(a:info, 'description', layer_state.info.description)
     let layer_state.info.active_optional = get(a:info, 'active_optional', layer_state.info.active_optional)
     let layer_state.info.cb_load = get(a:info, 'cb_load', layer_state.info.cb_load)
-    let layer_state.info.cb_active = get(a:info, 'cb_active', layer_state.info.cb_willActive)
+    let layer_state.info.cb_active = get(a:info, 'cb_active', layer_state.info.cb_active)
     let layer_state.info.cb_freshmenu = get(a:info, 'cb_freshmenu', layer_state.info.cb_freshmenu)
     let s:layers_state[a:name] = layer_state
   else
