@@ -69,7 +69,7 @@ function! s:close_buff(name) abort
 
 endfunction
 
-
+if has('python')
 function! s:show_buff(buff) abort
   if a:buff.buff != 0 && bufexists(a:buff.buff)
     " buffer exist, process has not finished!
@@ -105,6 +105,47 @@ function! s:show_buff(buff) abort
     return 2
   endif
 endfunction
+    
+elseif has('python3')
+function! s:show_buff(buff) abort
+  if a:buff.buff != 0 && bufexists(a:buff.buff)
+    " buffer exist, process has not finished!
+    return 0
+  elseif a:buff.buff != 0 && !bufexists(a:buff.buff)
+    " buffer is hidden, process has not finished!
+    call s:resume_buff(a:buff)
+    return 1
+  else
+    execute a:buff.win_cmd
+    "execute 'vertical split topleft new'
+    let a:buff.buff = bufnr('%')
+    setlocal buftype=nofile bufhidden=wipe nobuflisted nolist noswapfile nowrap cursorline nospell
+    if len(a:buff.file_type) > 0
+      execute 'setfiletype ' . a:buff.file_type
+    endif
+
+    py3 import vim
+    py3 import string
+    py3 bufnr = int(vim.eval("a:buff.buff"))
+
+    let numlines=py3eval('len(vim.buffers[bufnr])')
+
+    if len(a:buff.lines) != 0
+      let numlines=py3eval('len(vim.buffers[bufnr])')
+      call setline(1, a:buff.lines)
+      let numlines=py3eval('len(vim.buffers[bufnr])')
+    endif
+
+    setlocal nomodifiable 
+
+    call s:check(a:buff, 'after create buff')
+
+    return 2
+  endif
+endfunction
+endif
+
+
 
 
 function! s:resume_buff(buff) abort
@@ -194,6 +235,80 @@ if has('python')
   " @vimlint(EVL103, 0, a:bufnr)
   " @vimlint(EVL103, 0, a:nr)
   " @vimlint(EVL103, 0, a:line)
+elseif has('python3')
+  py3 import vim
+  py3 import string
+  " @vimlint(EVL103, 1, a:nr)
+  " @vimlint(EVL103, 1, a:line)
+  function! s:set_line(buff, nr, line) abort
+
+    call s:check(a:buff, 'set_line 入口')
+
+    let s:need_append_blank_line = a:nr - len(a:buff.lines)
+    if s:need_append_blank_line < 0
+      let s:need_append_blank_line = 0
+    endif
+
+
+    if bufexists(a:buff.buff)
+
+      py3 bufnr = int(vim.eval("a:buff.buff"))
+      py3 linr = int(vim.eval("a:nr")) - 1
+      py3 str = vim.eval("a:line")
+
+      call setbufvar(a:buff.buff,'&ma', 1)
+      let s:index = 0
+      while s:index < s:need_append_blank_line
+        py3 vim.buffers[bufnr].append('')
+        let s:index += 1
+      endwhile
+      py3 vim.buffers[bufnr][linr] = str
+      call setbufvar(a:buff.buff,'&ma', 0)
+
+    endif
+
+    let s:index = 0
+    while s:index < s:need_append_blank_line
+      call add(a:buff.lines, '\n')
+      let s:index += 1
+    endwhile
+
+    let a:buff.lines[a:nr - 1] = a:line
+    call s:check(a:buff, 'set_line 出口')
+
+  endfunction
+
+  function! s:append_line(buff, line) abort
+
+    call s:check(a:buff, 'append_line 入口: '. a:line)
+
+    if bufexists(a:buff.buff)
+
+      py3 import vim
+      py3 import string
+      
+      py3 bufnr = int(vim.eval("a:buff.buff"))
+      py3 str = vim.eval("a:line")
+
+      call setbufvar(a:buff.buff,'&ma', 1)
+      if len(a:buff.lines) == 0  &&  line('$') == 1
+        py3 vim.buffers[bufnr][0] = str
+      else
+        py3 vim.buffers[bufnr].append(str)
+      endif
+      call setbufvar(a:buff.buff,'&ma', 0)
+
+    endif
+
+    call add(a:buff.lines, a:line)
+
+    call s:check(a:buff, 'append_line 出口')
+    return len(a:buff.lines)
+
+  endfunction
+  " @vimlint(EVL103, 0, a:bufnr)
+  " @vimlint(EVL103, 0, a:nr)
+  " @vimlint(EVL103, 0, a:line)
 else
 
   function! s:focus_main_win(buff) abort
@@ -265,17 +380,17 @@ function! s:check(buff, msg)
     return
 
     if bufexists(a:buff.buff)
-      py import vim
-      py import string
+      py3 import vim
+      py3 import string
 
-      py bufnr = string.atoi(vim.eval("a:buff.buff"))
-      let ss = pyeval('string.atoi(vim.eval("a:buff.buff"))')
+      py3 bufnr = int(vim.eval("a:buff.buff"))
+      let ss = py3eval('int(vim.eval("a:buff.buff"))')
 
       echom '~~~~~~~~~~~~>' . a:msg
       echom ss
-      py print(bufnr)
+      py3 print(bufnr)
       let lines_in_list = len(a:buff.lines)
-      let lines_in_buff = pyeval('len(vim.buffers[bufnr])')
+      let lines_in_buff = py3eval('len(vim.buffers[bufnr])')
 
       if lines_in_list != lines_in_buff
         echom 'buf=' . lines_in_list . '  list=' . lines_in_buff
