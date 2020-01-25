@@ -8,6 +8,7 @@
 function! YXVim#lib#vimlib#config#get() abort
   return map({
         \'config' : '',
+        \'sys_config' : '',
         \'set' : '',
         \'get' : '',
         \'synchronize' : '',
@@ -44,6 +45,11 @@ function! s:config(key)
   endif
 
   return config_dict
+endfunction
+
+
+function! s:sys_config(key)
+    return s:config('.' . a:key)
 endfunction
 
 
