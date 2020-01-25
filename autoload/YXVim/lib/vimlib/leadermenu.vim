@@ -11,6 +11,7 @@ function! YXVim#lib#vimlib#leadermenu#get() abort
           \'create_menu' : '',
           \'set_submenu' : '',
           \'set_command' : '',
+          \'clear_submenu' : '',
           \'map_globalkeys' : '',
           \},
           \"function('s:' . v:key)"
@@ -53,6 +54,13 @@ endfunction
 
 function! s:set_submenu(menu, item_name, hotkey, submenu) abort "submenu is a dict created by create_menu function
   let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:submenu.content, 'type':'menu'}
+endfunction
+
+
+function! s:clear_submenu(menu, hotkey) abort
+    if has_key(a:menu.content, a:hotkey)
+      unlet a:menu.content[a:hotkey]
+    endif
 endfunction
 
 

@@ -7,8 +7,24 @@
 
 
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
-let s:plugin_key = 'p'
-let s:plugin_name = 'plugin'
+
+
+let s:RKey_OPERATION = 'o'
+
+
+let s:reserved_key = {}
+function! s:reserved_key() abort
+    if len(items(s:reserved_key)) == 0
+      "operation key
+      let s:reserved_key[s:RKey_OPERATION] = {'name':'optional'}
+    endif
+
+    return s:reserved_key
+endfunction
+
+function! s:is_reserved_key(key) abort
+    return has_key(s:reserved_key(), a:key)
+endfunction
 
 
 let s:global_menu = v:none
@@ -48,7 +64,7 @@ endfunction
 
 
 function! YXVim#api#globalmenu#set_submenu(menu_name, hotkey, submenu)
-  if a:hotkey == s:plugin_key
+  if s:is_reserved_key(a:hotkey)
     throw 'Hotkey "'. a:hotkey .'" is reserved for plugins. You cannot use this.'
   endif
 
@@ -58,12 +74,26 @@ endfunction
 
 
 function! YXVim#api#globalmenu#set_command(command_name, hotkey, command)
-
-  if a:hotkey == s:plugin_key
+  if s:is_reserved_key(a:hotkey)
     throw 'Hotkey "'. a:hotkey .'" is reserved for plugins. You cannot use this.'
   endif
 
   call s:LEADERMENU.set_command(YXVim#api#globalmenu#getmenu(), a:command_name, a:hotkey, a:command)
+  call YXVim#api#globalmenu#reset_leader_if_need()
+endfunction
+
+
+function! YXVim#api#globalmenu#set_operation(operationmenu)
+
+  if type(a:operationmenu) != v:t_none
+    echom 'set'
+    let l:operation_info = get(s:reserved_key(), s:RKey_OPERATION, v:t_none)
+    call s:LEADERMENU.set_submenu(YXVim#api#globalmenu#getmenu(), l:operation_info.name, s:RKey_OPERATION, a:operationmenu)
+  else
+    echom 'clear'
+    call s:LEADERMENU.clear_submenu(YXVim#api#globalmenu#getmenu(), s:RKey_OPERATION)
+  endif
+
   call YXVim#api#globalmenu#reset_leader_if_need()
 endfunction
 
