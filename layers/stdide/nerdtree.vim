@@ -229,7 +229,7 @@ nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 
 " Highlight currently open buffer in NERDTree
-nnoremap <C-S-J> :call s:find_current_file_in_nerd_tree()<CR>
+nnoremap <C-S-J> :call <SID>find_current_file_in_nerd_tree()<CR>
 
 
 
