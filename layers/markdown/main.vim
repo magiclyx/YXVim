@@ -11,7 +11,6 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 
 
 function! s:cb_load() abort
-    echo "fafafa"
 
   " tabular 文本对齐插件，vim-markdown必须安装
   call YXVim#api#plugin#add('godlygeek/tabular')

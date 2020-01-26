@@ -61,7 +61,12 @@ if dein#load_state(g:Data_Plugin_Dir)
 
   let all_plugin_list = YXVim#api#plugin#get_all()
   for plugin in all_plugin_list
-    call dein#add(plugin)
+
+    let s:repo = get(plugin, 'name', v:t_none)
+    let s:optional = get(plugin, 'optional', {})
+    if type(s:repo) != v:t_none
+      call dein#add(s:repo, s:optional)
+    endif
   endfor
 
   call dein#add('Shougo/deoplete.nvim')
@@ -77,7 +82,7 @@ endif
 
 silent! let check_plugin = dein#check_install()
 if check_plugin
-  augroup SpaceVimCheckInstall
+  augroup YXVimCheckInstall
 	au!
 	au VimEnter * YXInstall
   augroup END

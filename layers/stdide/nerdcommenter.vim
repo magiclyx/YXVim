@@ -62,7 +62,7 @@ nmap <silent><S-C> <Plug>NERDCommenterAppend
 
 " use following comman to list all available fletype
 " :echo glob($VIMRUNTIME . '/ftplugin/*.vim') OR :echo glob($VIMRUNTIME . '/syntax/*.vim')
-let s:support_filetype = ['c', 'ch', 'bash', 'cmake', 'conf', 'config', 'cpp', 'cs', 'csc', 'csh', 'css', 'diff', 'go', 'gdb', 'git', 'gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'help', 'html', 'htmldjango', 'java', 'javascript', 'javascriptreact', 'json', 'jsp', 'less', 'lftp', 'lua', 'mail', 'mailaliases', 'mailcap', 'make', 'man', 'manconf', 'markdown', 'matlab', 'objc', 'pdf', 'perl', 'perl6', 'php', 'plaintex', 'protocols', 'python', 'r', 'ruby', 'rust', 'sass', 'scheme', 'sh', 'sql', 'svg', 'sysctl', 'tcl', 'tcsh', 'terminfo', 'tex', 'text', 'vb', 'vim', 'xhtml', 'xml', 'xs', 'xsd', 'yaml', 'zsh']
+let s:support_filetype = ['c', 'ch', 'bash', 'cmake', 'conf', 'config', 'cpp', 'cs', 'csc', 'csh', 'css', 'diff', 'go', 'gdb', 'git', 'gitcommit', 'gitconfig', 'gitrebase', 'gitsendemail', 'help', 'html', 'htmldjango', 'java', 'javascript', 'javascriptreact', 'json', 'jsp', 'less', 'lftp', 'lua', 'mail', 'mailaliases', 'mailcap', 'make', 'man', 'manconf', 'markdown', 'matlab', 'objc', 'objcpp', 'pdf', 'perl', 'perl6', 'php', 'plaintex', 'protocols', 'python', 'r', 'ruby', 'rust', 'sass', 'scheme', 'sh', 'sql', 'svg', 'sysctl', 'tcl', 'tcsh', 'terminfo', 'tex', 'text', 'vb', 'vim', 'xhtml', 'xml', 'xs', 'xsd', 'yaml', 'zsh']
 
 
 

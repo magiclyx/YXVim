@@ -53,13 +53,19 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('majutsushi/tagbar')
   " add nerdtree plugin
   call YXVim#api#plugin#add('scrooloose/nerdtree')
-  " sdd comment plugin
+  " add comment plugin  
   call YXVim#api#plugin#add('preservim/nerdcommenter')
+  " use leaderF for search, 注意这里需要安装 install.sh
+  call YXVim#api#plugin#add('Yggdroot/LeaderF', {'build':'sh install.sh'})
 
   " add tagbar plugin config
   call YXVim#api#base#source(s:_current_file_dir.'/tagbar.vim')
+  " add nerdtree plugin
   call YXVim#api#base#source(s:_current_file_dir.'/nerdtree.vim')
+  " add comment plugin
   call YXVim#api#base#source(s:_current_file_dir.'/nerdcommenter.vim')
+  " add leaderF plugin
+  call YXVim#api#base#source(s:_current_file_dir.'/leaderf.vim')
 
 endfunction
 
