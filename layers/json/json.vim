@@ -9,7 +9,7 @@ let s:_current_file_path = resolve(expand('<sfile>:p'))
 let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 
 
-let g:vim_json_syntax_conceal = get(g:, 'vim_json_syntax_conceal', o)
+let g:vim_json_syntax_conceal = get(g:, 'vim_json_syntax_conceal', 0)
 
 
 function s:SID()
