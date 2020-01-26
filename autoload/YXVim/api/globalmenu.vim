@@ -9,7 +9,8 @@
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
 
 
-let s:RKey_OPERATION = 'o'
+let s:RKey_OPERATION = '.'
+let s:RKey_SHORTKEY = '?'
 
 
 let s:reserved_key = {}
@@ -17,6 +18,7 @@ function! s:reserved_key() abort
     if len(items(s:reserved_key)) == 0
       "operation key
       let s:reserved_key[s:RKey_OPERATION] = {'name':'optional'}
+      let s:reserved_key[s:RKey_SHORTKEY] = {'name':'short-key'}
     endif
 
     return s:reserved_key
@@ -84,14 +86,23 @@ endfunction
 
 
 function! YXVim#api#globalmenu#set_operation(operationmenu)
-
-  if type(a:operationmenu) != v:t_none
-    echom 'set'
+  
+  call s:LEADERMENU.clear_submenu(YXVim#api#globalmenu#getmenu(), s:RKey_OPERATION)
+  if type(a:operationmenu) != v:t_none && len(a:operationmenu.content) > 0
     let l:operation_info = get(s:reserved_key(), s:RKey_OPERATION, v:t_none)
     call s:LEADERMENU.set_submenu(YXVim#api#globalmenu#getmenu(), l:operation_info.name, s:RKey_OPERATION, a:operationmenu)
-  else
-    echom 'clear'
-    call s:LEADERMENU.clear_submenu(YXVim#api#globalmenu#getmenu(), s:RKey_OPERATION)
+  endif
+
+  call YXVim#api#globalmenu#reset_leader_if_need()
+endfunction
+
+
+function! YXVim#api#globalmenu#set_shortkey(operationmenu)
+  
+  call s:LEADERMENU.clear_submenu(YXVim#api#globalmenu#getmenu(), s:RKey_SHORTKEY)
+  if type(a:operationmenu) != v:t_none && len(a:operationmenu.content) > 0
+    let l:operation_info = get(s:reserved_key(), s:RKey_SHORTKEY, v:t_none)
+    call s:LEADERMENU.set_submenu(YXVim#api#globalmenu#getmenu(), l:operation_info.name, s:RKey_SHORTKEY, a:operationmenu)
   endif
 
   call YXVim#api#globalmenu#reset_leader_if_need()

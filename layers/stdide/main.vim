@@ -53,10 +53,13 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('majutsushi/tagbar')
   " add nerdtree plugin
   call YXVim#api#plugin#add('scrooloose/nerdtree')
+  " sdd comment plugin
+  call YXVim#api#plugin#add('preservim/nerdcommenter')
 
   " add tagbar plugin config
   call YXVim#api#base#source(s:_current_file_dir.'/tagbar.vim')
   call YXVim#api#base#source(s:_current_file_dir.'/nerdtree.vim')
+  call YXVim#api#base#source(s:_current_file_dir.'/nerdcommenter.vim')
 
 endfunction
 

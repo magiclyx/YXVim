@@ -9,6 +9,7 @@ function! YXVim#lib#vimlib#leadermenu#get() abort
     return map({
           \'toggle' : '',
           \'create_menu' : '',
+          \'merge_menu' : '',
           \'set_submenu' : '',
           \'set_command' : '',
           \'clear_submenu' : '',
@@ -21,6 +22,9 @@ endfunction
 
 let s:ACTION_SHEET = YXVim#lib#import('actionsheet')
 let s:LIST = YXVim#lib#import('list')
+let s:LOGGER = YXVim#lib#import('logger')
+let s:LOGGER.name = 'leadermenu'
+
 
 let g:LEADERMENU_HSPACE = 5
 
@@ -46,16 +50,69 @@ function! s:create_cheatsheet() abort
 endfunction
 
 
+function! s:merge_menu(menu_list) abort
+
+  if type(a:menu_list) != v:t_list
+      throw 'the param of merge_menu must a list'
+  endif
+
+
+
+  let l:new_menu = s:create_menu()
+
+  for a_menu in a:menu_list
+
+    if a_menu.isa !=# 'leader_menu'
+        throw 'merge_menu func just support leader_menu, but the isa is ' . a_menu.isa
+    endif
+
+    for [hotkey, content] in items(a_menu.content)
+        if content.type ==# 'menu'
+          call s:set_submenu(l:new_menu, content.name, hotkey, content)
+        elseif content.type ==# 'command'
+          call s:set_command(l:new_menu, content.name, hotkey, content)
+        else
+          echom 'unsupport the menu type ' . content.type
+        endif
+    endfor
+
+  endfor
+
+  return l:new_menu
+
+endfunction
+
 
 function! s:add_item_to_cheatsheet(cheatsheet, title, text)
     call s:LIST.push(a:cheatsheet.cheat_list, {'title':a:title, 'text':a:text})
 endfunction
 
 
-function! s:set_submenu(menu, item_name, hotkey, submenu) abort "submenu is a dict created by create_menu function
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:submenu.content, 'type':'menu'}
+" 这个函数用于下面调用，是私有的
+function! s:_set_content(menu, hotkey, content) abort
+
+  if has_key(a:menu.content, a:hotkey)
+   call s:LOGGER.warn('key "' . a:hotkey . '"(' . string(a:content) . ') already exist in ' . string(a:menu.content[a:hotkey]), 1)
+  endif
+
+  let a:menu.content[a:hotkey] = a:content
 endfunction
 
+function! s:set_submenu(menu, item_name, hotkey, submenu) abort "submenu is a dict created by create_menu function
+  call s:_set_content(a:menu, a:hotkey, {'name':a:item_name, 'content':a:submenu.content, 'type':'menu'})
+endfunction
+
+function! s:set_command(menu, item_name, hotkey, command) abort "command is a string
+  call s:_set_content(a:menu, a:hotkey, {'name':a:item_name, 'content':a:command, 'type':'command'})
+endfunction
+
+function! s:set_cheetsheet(menu, item_name, hotkey, cheetsheet) abort "cheetsheet is list, each item is a line
+  call s:_set_content(a:menu, a:hotkey, {'name':a:item_name, 'content':a:cheetsheet, 'type':'cheetsheet'})
+endfunction
+
+function! s:set_text(menu, item_name, hotkey, text) abort "text is a list, each item is a page
+  call s:_set_content(a:menu, a:hotkey, {'name':a:item_name, 'content':a:text, 'type':'text'})
+endfunction
 
 function! s:clear_submenu(menu, hotkey) abort
     if has_key(a:menu.content, a:hotkey)
@@ -64,17 +121,6 @@ function! s:clear_submenu(menu, hotkey) abort
 endfunction
 
 
-function! s:set_command(menu, item_name, hotkey, command) abort "command is a string
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:command, 'type':'command'}
-endfunction
-
-function! s:set_cheetsheet(menu, item_name, hotkey, cheetsheet) abort "cheetsheet is list, each item is a line
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:cheetsheet, 'type':'cheetsheet'}
-endfunction
-
-function! s:set_text(menu, item_name, hotkey, text) abort "text is a list, each item is a page
-  let a:menu.content[a:hotkey] = {'name':a:item_name, 'content':a:text, 'type':'text'}
-endfunction
 
 
 function! s:toggle(menu, title, leader) abort
