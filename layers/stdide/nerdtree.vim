@@ -85,13 +85,13 @@ let tree_menu = s:LEADERMENU.create_menu()
 
 call s:LEADERMENU.set_command(tree_menu, 'Toggle', 't', 'NERDTreeToggle')
 call s:LEADERMENU.set_command(tree_menu, 'Open Mirror', 'm', 'NERDTreeMirror')
-call s:LEADERMENU.set_command(tree_menu, 'Open to CWD', 'o', 'NERDTreeCWD')
+call s:LEADERMENU.set_command(tree_menu, 'Open to CWD', 'c', 'NERDTreeCWD')
 call s:LEADERMENU.set_command(tree_menu, 'Find', 'f', 'call feedkeys(":NERDTreeFind ", "i")')
 call s:LEADERMENU.set_command(tree_menu, 'Toggle Help(in NerdTree buff)', 'h', ':normal ?')
 
 "add bookmark menu"
 let bookmark_menu = s:LEADERMENU.create_menu()
-call s:LEADERMENU.set_submenu(tree_menu, 'Bookmark', 'm', bookmark_menu)
+call s:LEADERMENU.set_submenu(tree_menu, 'Bookmark', 'b', bookmark_menu)
 
 call s:LEADERMENU.set_command(bookmark_menu, 'Open', 'o', 'call feedkeys(":NERDTreeFromBookmark ", "i")')
 
