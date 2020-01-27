@@ -29,42 +29,49 @@ let g:EasyMotion_do_mapping = get(g:, 'EasyMotion_do_mapping', 0)
 
 
 " search
-map <Leader>ms <Plug>(easymotion-s)
+map <Leader>js <Plug>(easymotion-s)
 "map <Leader>ms <Plug>(easymotion-s2)
 
+" jump ( line OR anywhere )
+nmap <Leader>jV <Plug>(easymotion-lineanywhere)
+nmap <Leader>jg <Plug>(easymotion-jumptoanywhere)
+
+
 " F & f
-map <Leader>mf <Plug>(easymotion-f)
-"map <Leader>mf <Plug>(easymotion-f2)
-map <Leader>mF <Plug>(easymotion-F)
-"map <Leader>mF <Plug>(easymotion-F2)
+map <Leader>jf <Plug>(easymotion-f)
+"map <Leader>jf <Plug>(easymotion-f2)
+map <Leader>jF <Plug>(easymotion-F)
+"map <Leader>jF <Plug>(easymotion-F2)
 
 " f between window
-map <Leader>mxf <Plug>(easymotion-overwin-f)
-"map <Leader>mxf <Plug>(easymotion-overwin-f2)
+map <Leader>jxf <Plug>(easymotion-overwin-f)
+"map <Leader>jxf <Plug>(easymotion-overwin-f2)
 
 
 " w & b
-map <Leader>mw <Plug>(easymotion-w)
-map <Leader>mb <Plug>(easymotion-b)
+map <Leader>jw <Plug>(easymotion-w)
+map <Leader>jb <Plug>(easymotion-b)
 
 " w between window
-map <Leader>mxw <Plug>(easymotion-overwin-w)
+map <Leader>jxw <Plug>(easymotion-overwin-w)
 
 " hijk
-map <Leader>mh <Plug>(easymotion-linebackward)
-map <Leader>mj <Plug>(easymotion-j)
-map <Leader>mk <Plug>(easymotion-k)
-map <Leader>ml <Plug>(easymotion-lineforward)
+map <Leader>jh <Plug>(easymotion-linebackward)
+map <Leader>jj <Plug>(easymotion-j)
+map <Leader>jk <Plug>(easymotion-k)
+map <Leader>jl <Plug>(easymotion-lineforward)
 
 " move line between window
-map <Leader>mxl <Plug>(easymotion-overwin-line)
+map <Leader>jxl <Plug>(easymotion-overwin-line)
 
 " n & N in search
-map <Leader>mn <Plug>(easymotion-n)
-map <Leader>mN <Plug>(easymotion-N)
+map <Leader>jn <Plug>(easymotion-n)
+map <Leader>jN <Plug>(easymotion-N)
+
+
 
 " .
-map <Leader>m. <Plug>(easymotion-repeat)
+map <Leader>j. <Plug>(easymotion-repeat)
 
 
 
@@ -72,29 +79,35 @@ map <Leader>m. <Plug>(easymotion-repeat)
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
 let s:motion_menu = s:LEADERMENU.create_menu()
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Search', 's', YXVim#api#base#leader_keys('ms'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Search', 's', YXVim#api#base#leader_keys('js'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Find ->', 'f', YXVim#api#base#leader_keys('mf'))
-call s:LEADERMENU.set_command(s:motion_menu, 'Find <-', 'F', YXVim#api#base#leader_keys('mF'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Jump any where', 'g', YXVim#api#base#leader_keys('jg'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Jump line', 'V', YXVim#api#base#leader_keys('jV'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Wnd find', 'xf', YXVim#api#base#leader_keys('mxf'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Word ->', 'w', YXVim#api#base#leader_keys('mw'))
-call s:LEADERMENU.set_command(s:motion_menu, 'Word <-', 'b', YXVim#api#base#leader_keys('mb'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Find ->', 'f', YXVim#api#base#leader_keys('jf'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Find <-', 'F', YXVim#api#base#leader_keys('jF'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Wnd word <-', 'xw', YXVim#api#base#leader_keys('mxw'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Wnd find', 'xf', YXVim#api#base#leader_keys('jxf'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'h', 'h', YXVim#api#base#leader_keys('mh'))
-call s:LEADERMENU.set_command(s:motion_menu, 'j', 'j', YXVim#api#base#leader_keys('mj'))
-call s:LEADERMENU.set_command(s:motion_menu, 'k', 'k', YXVim#api#base#leader_keys('mk'))
-call s:LEADERMENU.set_command(s:motion_menu, 'l', 'l', YXVim#api#base#leader_keys('ml'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Word ->', 'w', YXVim#api#base#leader_keys('jw'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Word <-', 'b', YXVim#api#base#leader_keys('jb'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Wnd line', 'xl', YXVim#api#base#leader_keys('mxl'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Wnd word <-', 'xw', YXVim#api#base#leader_keys('jxw'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Search ->', 'n', YXVim#api#base#leader_keys('mn'))
-call s:LEADERMENU.set_command(s:motion_menu, 'Search <-', 'N', YXVim#api#base#leader_keys('mN'))
+call s:LEADERMENU.set_command(s:motion_menu, 'h', 'h', YXVim#api#base#leader_keys('jh'))
+call s:LEADERMENU.set_command(s:motion_menu, 'j', 'j', YXVim#api#base#leader_keys('jj'))
+call s:LEADERMENU.set_command(s:motion_menu, 'k', 'k', YXVim#api#base#leader_keys('jk'))
+call s:LEADERMENU.set_command(s:motion_menu, 'l', 'l', YXVim#api#base#leader_keys('jl'))
 
-call s:LEADERMENU.set_command(s:motion_menu, 'Repead', '.', YXVim#api#base#leader_keys('m.'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Wnd line', 'xl', YXVim#api#base#leader_keys('jxl'))
+
+call s:LEADERMENU.set_command(s:motion_menu, 'Search ->', 'n', YXVim#api#base#leader_keys('jn'))
+call s:LEADERMENU.set_command(s:motion_menu, 'Search <-', 'N', YXVim#api#base#leader_keys('jN'))
+
+
+
+call s:LEADERMENU.set_command(s:motion_menu, 'Repead', '.', YXVim#api#base#leader_keys('j.'))
 
 
 
@@ -102,8 +115,12 @@ call s:LEADERMENU.set_command(s:motion_menu, 'Repead', '.', YXVim#api#base#leade
 let s:help_menu = s:LEADERMENU.create_menu()
 call s:LEADERMENU.set_submenu(s:motion_menu, 'Help', '?', s:help_menu)
 
-call s:LEADERMENU.set_command(s:help_menu, 'Search', '<leader>ms', '')
-call s:LEADERMENU.set_command(s:help_menu, 'Operation line between wnd', '<leader>mxl', '')
+call s:LEADERMENU.set_command(s:help_menu, 'Search', '<leader>js', '')
+
+call s:LEADERMENU.set_command(s:help_menu, 'Jump any where', '<leader>jg', '')
+call s:LEADERMENU.set_command(s:help_menu, 'jump in line', '<leader>jV', '')
+
+call s:LEADERMENU.set_command(s:help_menu, 'Operation line between wnd', '<leader>jxl', '')
 call s:LEADERMENU.set_command(s:help_menu, 'Operation in current Wnd', '<leader>m<?>', '')
 call s:LEADERMENU.set_command(s:help_menu, 'Operation in all wnd', '<leader>mx<?>', '')
 call s:LEADERMENU.set_command(s:help_menu, 'Support vim key', 'f/F, w/b, h/j/k/l, n/N, .', '')
@@ -111,7 +128,7 @@ call s:LEADERMENU.set_command(s:help_menu, 'Support vim key', 'f/F, w/b, h/j/k/l
 
 
 " 注册
-call YXVim#api#globalmenu#set_submenu('Motion', 'm', s:motion_menu)
+call YXVim#api#globalmenu#set_submenu('Jump', 'j', s:motion_menu)
 
 
 
