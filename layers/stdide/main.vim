@@ -59,6 +59,13 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('Yggdroot/LeaderF', {'build':'sh install.sh'})
   " use mru manage the buf
   call YXVim#api#plugin#add('yegappan/mru')
+  " use tabular 文本对齐插件
+  call YXVim#api#plugin#add('godlygeek/tabular')
+  
+
+  " use vim-mark 
+  " https://github.com/vim-scripts/Mark
+  " call YXVim#api#plugin#add('vim-scripts/Mark')
 
   
   " add quickfix config
@@ -73,6 +80,8 @@ function! s:cb_load() abort
   call YXVim#api#base#source(s:_current_file_dir.'/leaderf.vim')
   " add mru config
   call YXVim#api#base#source(s:_current_file_dir.'/mru.vim')
+  " add tabular config
+  call YXVim#api#base#source(s:_current_file_dir.'/tabular.vim')
 
 endfunction
 

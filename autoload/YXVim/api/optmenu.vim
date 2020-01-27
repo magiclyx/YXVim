@@ -48,8 +48,13 @@ function! s:auto_adjust_operation_menu()
 "      return
 "  endif
 
-  let l:menu_list = get(s:filetype_opt, l:filetype, [])
-  "let l:new_menu = YXVim#api#globalmenu#merge_menu(l:menu_list)
+  " 取出当前文件对应的目录
+  let l:ft_menu_list = get(s:filetype_opt, l:filetype, [])
+  " 取出 * 对应的目录
+  let l:star_menu_list = get(s:filetype_opt, '*', [])
+  " 目录相加
+  let l:menu_list = l:ft_menu_list + l:star_menu_list
+
   let l:new_menu = s:LEADERMENU.merge_menu(l:menu_list)
 
   call YXVim#api#globalmenu#set_operation(l:new_menu)
