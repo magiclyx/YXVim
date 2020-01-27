@@ -13,10 +13,11 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 
 " Path of MRU_File
 let g:MRU_Home = g:Data_Home.'/mru'
+let g:MRU_FILE = g:MRU_Home . '/vim_mru_files'
 if finddir(g:MRU_Home) ==# ''
     silent call mkdir(g:MRU_Home)
 endif
-let MRU_File = get(g:, 'MRU_File', g:MRU_Home.'/vim_mru_files')
+let MRU_File = get(g:, 'MRU_File', g:MRU_FILE)
 
 
 " By default, the plugin will remember the names of the last 100 used files.
@@ -54,7 +55,7 @@ let MRU_Window_Height = get(g:, 'MRU_Window_Height', 15)
 
 " When you select a file from the MRU window, the MRU window will be automatically closed and the selected file will be opened in the previous window.
 " You can set the MRU_Auto_Close variable to zero to keep the MRU window open.
-let MRU_Auto_Close = get(g:, 'MRU_Auto_Close', 0)
+let MRU_Auto_Close = get(g:, 'MRU_Auto_Close', 1)
 
 
 " If you don't use the "File->Recent Files" menu and want to disable it, then you can set the MRU_Add_Menu variable to zero.
@@ -112,6 +113,21 @@ endfun
 " endfunction
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
+function! s:mru_autoclose_state_change() abort
+
+    if g:MRU_Auto_Close == 0
+        let g:MRU_Auto_Close = 1
+        echom 'mru auto close [ON]'
+    else
+        let g:MRU_Auto_Close = 0
+        echom 'mru auto close [OFF]'
+    endif
+
+endfunction
+
+" 添加一个命令，用于开关mru自动开关
+command! YXMruAutoClose call s:mru_autoclose_state_change()
+
 " YXBuffList 包装了ls 和 Buf 选择页
 command! YXBuffList call feedkeys(":ls<CR>:b<Space>", "i")
 
@@ -119,9 +135,11 @@ command! YXBuffList call feedkeys(":ls<CR>:b<Space>", "i")
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
 let s:buff_menu = s:LEADERMENU.create_menu()
 
-call s:LEADERMENU.set_command(s:buff_menu, 'Buff', 'b', ':YXBuffList", "i")')
+call s:LEADERMENU.set_command(s:buff_menu, 'Buff', 'b', ':YXBuffList')
 call s:LEADERMENU.set_command(s:buff_menu, 'Mru', 'm', ':MRU')
 call s:LEADERMENU.set_command(s:buff_menu, 'Mru by filter', 'f', 'call feedkeys(":MRU ", "i")')
+call s:LEADERMENU.set_command(s:buff_menu, 'Mru edit', 'e', ':e ' . g:MRU_FILE)
+call s:LEADERMENU.set_command(s:buff_menu, 'Mru auto close', 's', ':YXMruAutoClose')
 call s:LEADERMENU.set_command(s:buff_menu, 'Close', 'q', 'call feedkeys(":q<CR>", "i")')
 
 
