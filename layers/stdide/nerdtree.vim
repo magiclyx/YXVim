@@ -75,46 +75,6 @@ let g:NERDTreeAutoDeleteBuffer = get(g:, "NERDTreeAutoDeleteBuffer", 1)
 let g:NERDTreeShowLineNumbers = get(g:, "NERDTreeShowLineNumbers", 1)
 
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" add NERDTree menu
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-let s:LEADERMENU = YXVim#lib#import('leadermenu')
-
-let tree_menu = s:LEADERMENU.create_menu()
-
-
-call s:LEADERMENU.set_command(tree_menu, 'Toggle', 't', 'NERDTreeToggle')
-call s:LEADERMENU.set_command(tree_menu, 'Open Mirror', 'm', 'NERDTreeMirror')
-call s:LEADERMENU.set_command(tree_menu, 'Open to CWD', 'c', 'NERDTreeCWD')
-call s:LEADERMENU.set_command(tree_menu, 'Find', 'f', 'call feedkeys(":NERDTreeFind ", "i")')
-call s:LEADERMENU.set_command(tree_menu, 'Toggle Help(in NerdTree buff)', 'h', ':normal ?')
-
-"add bookmark menu"
-let bookmark_menu = s:LEADERMENU.create_menu()
-call s:LEADERMENU.set_submenu(tree_menu, 'Bookmark', 'b', bookmark_menu)
-
-call s:LEADERMENU.set_command(bookmark_menu, 'Open', 'o', 'call feedkeys(":NERDTreeFromBookmark ", "i")')
-
-call s:LEADERMENU.set_command(bookmark_menu, 'Add', 'a', 'call feedkeys(":Bookmark ", "i")')
-call s:LEADERMENU.set_command(bookmark_menu, 'Delete', 'd', 'call feedkeys(":ClearBookmarks ", "i")')
-call s:LEADERMENU.set_command(bookmark_menu, 'Clear', 'c', 'ClearAllBookmarks')
-
-"if exists('t:NERDTreeBufName')
-""  if bufname('%') == t:NERDTreeBufName
-call s:LEADERMENU.set_command(bookmark_menu, 'Fresh(in NerdTree buff)', 'f', 'ReadBookmarks') "just work in NERDTree window
-""  endif
-"endif
-
-
-call s:LEADERMENU.set_command(bookmark_menu, 'Set root', 's', 'call feedkeys(":BookmarkToRoot ", "i")')
-call s:LEADERMENU.set_command(bookmark_menu, 'Reveal', 'r', 'call feedkeys(":RevealBookmark ", "i")')
-
-
-call YXVim#api#globalmenu#set_submenu('NERDTree', 't', tree_menu)
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" private function
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 
@@ -228,10 +188,62 @@ augroup END
 nnoremap <silent> <F3> :NERDTreeToggle<CR>
 
 
+" 不再使用这个，因为 <C-S-J> 和 <C-J> 效果相同，会产生映射冲突
 " Highlight currently open buffer in NERDTree
-nnoremap <C-S-J> :call <SID>find_current_file_in_nerd_tree()<CR>
+"nnoremap <C-S-J> :call <SID>find_current_file_in_nerd_tree()<CR>
 
 
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" add NERDTree menu
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+function s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfun
+
+
+let s:LEADERMENU = YXVim#lib#import('leadermenu')
+
+let tree_menu = s:LEADERMENU.create_menu()
+
+
+call s:LEADERMENU.set_command(tree_menu, 'Toggle', 't', 'NERDTreeToggle')
+call s:LEADERMENU.set_command(tree_menu, 'Open Mirror', 'm', 'NERDTreeMirror')
+call s:LEADERMENU.set_command(tree_menu, 'Open to CWD', 'c', 'NERDTreeCWD')
+call s:LEADERMENU.set_command(tree_menu, 'Find', 'f', 'call feedkeys(":NERDTreeFind ", "i")')
+call s:LEADERMENU.set_command(tree_menu, 'Hightlight open buff', 'j', 'call <SNR>' . s:SID() . '_find_current_file_in_nerd_tree()')
+call s:LEADERMENU.set_command(tree_menu, 'Toggle Help(in NerdTree buff)', 'h', ':normal ?')
+
+"call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen type/**/ and //', 's', 'call <SNR>' . s:SID() . '_normalWithLeader("ca")')
+
+
+"add bookmark menu"
+let bookmark_menu = s:LEADERMENU.create_menu()
+call s:LEADERMENU.set_submenu(tree_menu, 'Bookmark', 'b', bookmark_menu)
+
+call s:LEADERMENU.set_command(bookmark_menu, 'Open', 'o', 'call feedkeys(":NERDTreeFromBookmark ", "i")')
+
+call s:LEADERMENU.set_command(bookmark_menu, 'Add', 'a', 'call feedkeys(":Bookmark ", "i")')
+call s:LEADERMENU.set_command(bookmark_menu, 'Delete', 'd', 'call feedkeys(":ClearBookmarks ", "i")')
+call s:LEADERMENU.set_command(bookmark_menu, 'Clear', 'c', 'ClearAllBookmarks')
+
+"if exists('t:NERDTreeBufName')
+""  if bufname('%') == t:NERDTreeBufName
+call s:LEADERMENU.set_command(bookmark_menu, 'Fresh(in NerdTree buff)', 'f', 'ReadBookmarks') "just work in NERDTree window
+""  endif
+"endif
+
+
+call s:LEADERMENU.set_command(bookmark_menu, 'Set root', 's', 'call feedkeys(":BookmarkToRoot ", "i")')
+call s:LEADERMENU.set_command(bookmark_menu, 'Reveal', 'r', 'call feedkeys(":RevealBookmark ", "i")')
+
+
+call YXVim#api#globalmenu#set_submenu('NERDTree', 't', tree_menu)
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" private function
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 
 
