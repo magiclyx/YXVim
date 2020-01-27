@@ -33,30 +33,30 @@ let g:NERDTrimTrailingWhitespace = get(g:, 'NERDTrimTrailingWhitespace', 1)
 " 检查选中的行操作是否成功
 let g:NERDToggleCheckAllLines = get(g:, 'NERDToggleCheckAllLines', 1)
 
+" Turn the default mapping off
+let g:NERDCreateDefaultMappings = get(g:, 'NERDCreateDefaultMappings', 0)
 
 
 
-function s:SID()
-  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
-endfun
-
-function! s:normalWithLeader(key)
+function! s:leaderKeys(key)
   let l:leader = get(g:,"mapleader","\\")
 
   if l:leader == ' '
     let l:leader = '1' . l:leader
+  elseif l:leader ==# '\'
+    let l:leader = '\\'
   endif
 
-  silent execute ":normal " . l:leader . a:key
+  return 'call feedkeys("' . l:leader . a:key . '", "i")'
 endfunction
 
+"map comment toggle to <Leader>cc
+vmap <silent><Leader>cc <Plug>NERDCommenterToggle
+nmap <silent><Leader>cc <Plug>NERDCommenterToggle
 
-vmap <silent><C-c> <Plug>NERDCommenterToggle
-nmap <silent><C-c> <Plug>NERDCommenterToggle
-
-
-vmap <silent><S-C> <Plug>NERDCommenterAppend
-nmap <silent><S-C> <Plug>NERDCommenterAppend
+"map tail comment to <Leader>ce
+vmap <silent><Leader>ce <Plug>NERDCommenterAppend
+nmap <silent><Leader>ce <Plug>NERDCommenterAppend
 
 
 
@@ -73,8 +73,8 @@ let s:shortkey_menu = s:LEADERMENU.create_menu()
 let s:comment_shortkey_menu = s:LEADERMENU.create_menu()
 call s:LEADERMENU.set_submenu(s:shortkey_menu, 'Comment', 'c', s:comment_shortkey_menu)
 
-call s:LEADERMENU.set_command(s:comment_shortkey_menu, 'Toggle comment', 'C-c', '')
-call s:LEADERMENU.set_command(s:comment_shortkey_menu, 'Comment end line', 'C-S-c', '')
+call s:LEADERMENU.set_command(s:comment_shortkey_menu, 'Toggle comment', '<Leader>cc', '')
+call s:LEADERMENU.set_command(s:comment_shortkey_menu, 'Comment end line', '<Leader>ce', '')
 
 
 call YXVim#api#shortkeymenu#regist(s:support_filetype, s:shortkey_menu)
@@ -89,7 +89,8 @@ let s:comment_optional_menu = s:LEADERMENU.create_menu()
 
 call s:LEADERMENU.set_submenu(s:optional_menu, 'Comment', 'c', s:comment_optional_menu)
 
-call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen type/**/ and //', 's', 'call <SNR>' . s:SID() . '_normalWithLeader("ca")')
+"call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen type/**/ and //', 's', 'call <SNR>' . s:SID() . '_normalWithLeader("ca")')
+call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen delimit', 's', s:leaderKeys('ca'))
 
 call YXVim#api#optmenu#regist(s:support_filetype, s:optional_menu)
 
