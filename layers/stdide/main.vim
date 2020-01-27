@@ -61,7 +61,9 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('yegappan/mru')
   " use tabular 文本对齐插件
   call YXVim#api#plugin#add('godlygeek/tabular')
-  
+  " use vim-easymotion
+  call YXVim#api#plugin#add('easymotion/vim-easymotion')
+
 
   " use vim-mark 
   " https://github.com/vim-scripts/Mark
@@ -82,6 +84,8 @@ function! s:cb_load() abort
   call YXVim#api#base#source(s:_current_file_dir.'/mru.vim')
   " add tabular config
   call YXVim#api#base#source(s:_current_file_dir.'/tabular.vim')
+  " add easymotion config
+  call YXVim#api#base#source(s:_current_file_dir.'/easymotion.vim')
 
 endfunction
 

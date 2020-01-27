@@ -25,12 +25,24 @@ endfunction
 
 " reload all config
 function! YXVim#api#base#src_reload() abort
-    call YXVim#api#base#exec_proclaim(':source '.g:Config_Main_Home.'/vimrc')
+    call YXVim#api#base#exec_proclaim(':source '.g:Config_Main_Home.'/main.vim')
 endfunction
 
 " open the main config file
 function! YXVim#api#base#src_open() abort
     call YXVim#api#base#exec_proclaim(':e! '.g:Config_Main_Home.'/main.vim')
+endfunction
+
+function! YXVim#api#base#leader_keys(...)
+  let l:leader = get(g:,"mapleader","\\")
+
+  if l:leader == ' '
+    let l:leader = '1' . l:leader
+  elseif l:leader ==# '\'
+    let l:leader = '\\'
+  endif
+
+  return 'call feedkeys("' . l:leader . join(a:000) . '", "i")'
 endfunction
 
 
