@@ -182,7 +182,7 @@ function! s:VStarSearch(direction) range
     if a:direction == 'b'
         execute "normal ?" . l:pattern . "^M"
     elseif a:direction == 'gv'
-        call VStartSearchMenu("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
+        call s:VStartSearchMenu("vimgrep " . '/'. l:pattern . '/' . ' **/*.')
     elseif a:direction == 'f'
         execute "normal /" . l:pattern . "^M"
     endif

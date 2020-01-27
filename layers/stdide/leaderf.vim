@@ -109,12 +109,9 @@ call s:LEADERMENU.set_command(s:leaderf_menu, 'Function', 'h', s:leaderKeys('fh'
 
 
 
-" let s:grep_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:leaderf_menu, 'Grep', 'g', s:grep_menu)
-" call s:LEADERMENU.set_command(s:grep_menu, 'Current buff', 'c', s:leaderKeys('gb'))
-" call s:LEADERMENU.set_command(s:grep_menu, 'Buff', 'b', s:leaderKeys('gm'))
-" call s:LEADERMENU.set_command(s:grep_menu, 'Append Search', 'a', s:leaderKeys('ga'))
-" call s:LEADERMENU.set_command(s:grep_menu, 'Repead Last Search', 'r', s:leaderKeys('gr'))
+let s:grep_menu = s:LEADERMENU.create_menu()
+call s:LEADERMENU.set_submenu(s:leaderf_menu, 'Grep', 'g', s:grep_menu)
+call s:LEADERMENU.set_command(s:grep_menu, 'vimgrep', 'g', s:leaderKeys('g'))
 
 
 let s:help_menu = s:LEADERMENU.create_menu()

@@ -57,15 +57,22 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('preservim/nerdcommenter')
   " use leaderF for search, 注意这里需要安装 install.sh
   call YXVim#api#plugin#add('Yggdroot/LeaderF', {'build':'sh install.sh'})
+  " use mru manage the buf
+  call YXVim#api#plugin#add('yegappan/mru')
 
+  
+  " add quickfix config
+  call YXVim#api#base#source(s:_current_file_dir.'/quickfix.vim')
   " add tagbar plugin config
   call YXVim#api#base#source(s:_current_file_dir.'/tagbar.vim')
-  " add nerdtree plugin
+  " add nerdtree config
   call YXVim#api#base#source(s:_current_file_dir.'/nerdtree.vim')
-  " add comment plugin
+  " add comment config
   call YXVim#api#base#source(s:_current_file_dir.'/nerdcommenter.vim')
-  " add leaderF plugin
+  " add leaderF config
   call YXVim#api#base#source(s:_current_file_dir.'/leaderf.vim')
+  " add mru config
+  call YXVim#api#base#source(s:_current_file_dir.'/mru.vim')
 
 endfunction
 

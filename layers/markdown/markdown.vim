@@ -167,12 +167,12 @@ call YXVim#api#optmenu#regist('markdown', s:menu)
 
 " nnoremap <leader>s :call <SID>tttt()<CR>
 
-command! -nargs=*
-      \ -complete=custom,s:complete_plugin
-      \ YXUpdate call <SID>update_plugin(<f-args>)
+" command! -nargs=*
+"       \ -complete=custom,s:complete_plugin
+"       \ YXUpdate call <SID>update_plugin(<f-args>)
 
 
 augroup YXMarkdown
-  " autocmd! pscbindi
+  autocmd!
   autocmd Filetype markdown nmap <buffer> <silent> <F2> :Toc<CR>
 augroup END
