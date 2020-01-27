@@ -81,17 +81,6 @@ noremap <leader>gr :<C-U>Leaderf! rg --recall<CR>
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " add finder menu
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-function! s:leaderKeys(key)
-  let l:leader = get(g:,"mapleader","\\")
-
-  if l:leader == ' '
-    let l:leader = '1' . l:leader
-  elseif l:leader ==# '\'
-    let l:leader = '\\'
-  endif
-
-  return 'call feedkeys("' . l:leader . a:key . '", "i")'
-endfunction
 
 
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
@@ -100,18 +89,18 @@ let s:leaderf_menu = s:LEADERMENU.create_menu()
 
 " 'call <SNR>' . s:SID() . '_normalWithLeader("ca")'
 
-call s:LEADERMENU.set_command(s:leaderf_menu, 'File', 'f', s:leaderKeys('ff'))
-call s:LEADERMENU.set_command(s:leaderf_menu, 'Buff', 'b', s:leaderKeys('fb'))
-call s:LEADERMENU.set_command(s:leaderf_menu, 'Mru', 'm', s:leaderKeys('fm'))
-call s:LEADERMENU.set_command(s:leaderf_menu, 'Tag', 't', s:leaderKeys('ft'))
-call s:LEADERMENU.set_command(s:leaderf_menu, 'Line', 'l', s:leaderKeys('fl'))
-call s:LEADERMENU.set_command(s:leaderf_menu, 'Function', 'h', s:leaderKeys('fh'))
+call s:LEADERMENU.set_command(s:leaderf_menu, 'File', 'f', YXVim#api#base#leader_keys('ff'))
+call s:LEADERMENU.set_command(s:leaderf_menu, 'Buff', 'b', YXVim#api#base#leader_keys('fb'))
+call s:LEADERMENU.set_command(s:leaderf_menu, 'Mru', 'm', YXVim#api#base#leader_keys('fm'))
+call s:LEADERMENU.set_command(s:leaderf_menu, 'Tag', 't', YXVim#api#base#leader_keys('ft'))
+call s:LEADERMENU.set_command(s:leaderf_menu, 'Line', 'l', YXVim#api#base#leader_keys('fl'))
+call s:LEADERMENU.set_command(s:leaderf_menu, 'Function', 'h', YXVim#api#base#leader_keys('fh'))
 
 
 
 let s:grep_menu = s:LEADERMENU.create_menu()
 call s:LEADERMENU.set_submenu(s:leaderf_menu, 'Grep', 'g', s:grep_menu)
-call s:LEADERMENU.set_command(s:grep_menu, 'vimgrep', 'g', s:leaderKeys('g'))
+call s:LEADERMENU.set_command(s:grep_menu, 'vimgrep', 'g', YXVim#api#base#leader_keys('g'))
 
 
 let s:help_menu = s:LEADERMENU.create_menu()

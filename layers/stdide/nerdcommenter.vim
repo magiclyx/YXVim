@@ -38,17 +38,6 @@ let g:NERDCreateDefaultMappings = get(g:, 'NERDCreateDefaultMappings', 0)
 
 
 
-function! s:leaderKeys(key)
-  let l:leader = get(g:,"mapleader","\\")
-
-  if l:leader == ' '
-    let l:leader = '1' . l:leader
-  elseif l:leader ==# '\'
-    let l:leader = '\\'
-  endif
-
-  return 'call feedkeys("' . l:leader . a:key . '", "i")'
-endfunction
 
 "map comment toggle to <Leader>cc
 vmap <silent><Leader>cc <Plug>NERDCommenterToggle
@@ -68,6 +57,7 @@ let s:support_filetype = ['c', 'ch', 'bash', 'cmake', 'conf', 'config', 'cpp', '
 
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
 
+" add shortkey menu
 let s:shortkey_menu = s:LEADERMENU.create_menu()
 
 let s:comment_shortkey_menu = s:LEADERMENU.create_menu()
@@ -81,8 +71,7 @@ call YXVim#api#shortkeymenu#regist(s:support_filetype, s:shortkey_menu)
 
 
 
-
-
+" add option menu
 let s:optional_menu = s:LEADERMENU.create_menu()
 
 let s:comment_optional_menu = s:LEADERMENU.create_menu()
@@ -90,7 +79,7 @@ let s:comment_optional_menu = s:LEADERMENU.create_menu()
 call s:LEADERMENU.set_submenu(s:optional_menu, 'Comment', 'c', s:comment_optional_menu)
 
 "call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen type/**/ and //', 's', 'call <SNR>' . s:SID() . '_normalWithLeader("ca")')
-call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen delimit', 's', s:leaderKeys('ca'))
+call s:LEADERMENU.set_command(s:comment_optional_menu, 'Switch commen delimit', 's', YXVim#api#base#leader_keys('ca'))
 
 call YXVim#api#optmenu#regist(s:support_filetype, s:optional_menu)
 
