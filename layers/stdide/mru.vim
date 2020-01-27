@@ -32,7 +32,7 @@ let MRU_Max_Entries = get(g:, 'MRU_Max_Entries', 1000)
 " let MRU_Exclude_Files = '^/tmp/.*\|^/var/tmp/.*'  " For Unix
 " let MRU_Exclude_Files = '^D:\\temp\\.*'           " For MS-Windows
 " The specified pattern should be a Vim regular expression pattern.
-"let MRU_Exclude_Files = get(g:, 'MRU_Exclude_Files', '^/tmp/.*\|^/var/tmp/.*')
+let MRU_Exclude_Files = get(g:, 'MRU_Exclude_Files', g:MRU_FILE)
 
 
 " If you want to add only file names matching a set of patterns to the MRU list, then you can set the MRU_Include_Files variable.
