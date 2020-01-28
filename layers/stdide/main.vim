@@ -63,6 +63,9 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('godlygeek/tabular')
   " use vim-easymotion
   call YXVim#api#plugin#add('easymotion/vim-easymotion')
+  " vimm-shell
+  call YXVim#api#plugin#add('Shougo/vimproc.vim', {'build' : 'make'})
+  call YXVim#api#plugin#add('Shougo/vimshell.vim')
 
 
   " use vim-mark 
@@ -88,6 +91,8 @@ function! s:cb_load() abort
   call YXVim#api#base#source(s:_current_file_dir.'/easymotion.vim')
   " add rainbow config
   call YXVim#api#base#source(s:_current_file_dir.'/rainbow.vim')
+  " add shell config
+  call YXVim#api#base#source(s:_current_file_dir.'/shell.vim')
 
 endfunction
 
