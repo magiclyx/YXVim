@@ -23,6 +23,8 @@ function! s:cb_load() abort
   call YXVim#api#plugin#add('vimcn/NERD_commenter.cnx')
   "tagbar: Display tags of the current file ordered by scope
   call YXVim#api#plugin#add('vimcn/tagbar.cnx')
+  "vimwiki 中文文档
+  call YXVim#api#plugin#add('vimcn/vimwiki.vim.cnx')
   "mru.vim 中文文档
   call YXVim#api#plugin#add('vimcn/mru.vim.cnx')
   
