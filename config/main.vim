@@ -75,13 +75,13 @@ execute 'set runtimepath+='.g:Config_User_Home
 
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" map commands
+" map commands, 这个没什么用，还和其他按键冲突了
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " fast edit vimrc
-nnoremap <leader>e :call YXVim#api#base#src_open()<CR>
+" nnoremap <leader>e :call YXVim#api#base#src_open()<CR>
 
 " fase reload vimrc
-nnoremap <leader>r :call YXVim#api#base#src_reload()<CR>
+" nnoremap <leader>r :call YXVim#api#base#src_reload()<CR>
 
 
 

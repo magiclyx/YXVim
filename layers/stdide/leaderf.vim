@@ -64,6 +64,9 @@ noremap <leader>ga :<C-U><C-R>=printf("Leaderf! rg --append -e %s ", expand("<cw
 noremap <leader>gr :<C-U>Leaderf! rg --recall<CR>
 
 
+map <leader>g :vimgrep // **/*.<left><left><left><left><left><left><left>
+"nmap <leader>g :execute 'noautocmd vimgrep /\V' . substitute(escape(expand("<cword>"), '\'), '\n', '\\n', 'g') . '/ **'<CR>
+
 
 " search word under cursor in *.h and *.cpp files.
 "noremap <Leader>a :<C-U><C-R>=printf("Leaderf! rg -e %s -g *.h -g *.cpp", expand("<cword>"))<CR>
