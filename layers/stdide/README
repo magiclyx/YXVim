@@ -1,2 +1,6 @@
 1. 需要ripgrep. leaderF 搜索用
 brew install ripgrep
+
+2. NerdTree 需要 xclip
+
+3. 需要 ctags (brew install ctags)

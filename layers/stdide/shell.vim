@@ -108,20 +108,81 @@ else
   let g:vimshell_prompt = get(g:, 'vimshell_prompt', $USER."% ")
 endif
 
-" Initialize execute file list.
-let g:vimshell_execute_file_list = {}
-" call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
-let g:vimshell_execute_file_list['scpt'] = 'osascript'
-let g:vimshell_execute_file_list['sh'] = 'bash'
-let g:vimshell_execute_file_list['rb'] = 'ruby'
-let g:vimshell_execute_file_list['pl'] = 'perl'
-let g:vimshell_execute_file_list['py'] = 'python'
-" call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
 
+function s:SID()
+  return matchstr(expand('<sfile>'), '<SNR>\zs\d\+\ze_SID$')
+endfun
+
+function! s:exec_c_cmd()
+  let l:file_path = resolve(expand('<cfile>:p'))
+  let l:cmd_dir = s:_current_file_dir.'/execm'
+
+  let l:cmd = 'set CR_FILENAME '.l:file_path.';'.l:cmd_dir.'/c.sh'
+  echom l:cmd
+  return l:cmd
+
+endfunction
+
+
+" Initialize execute file listobjc.
+let s:exec_list = {}
+
+let g:vimshell_execute_file_list = {}
+"call vimshell#set_execute_file('txt,vim,c,h,cpp,d,xml,java', 'vim')
+
+
+let g:vimshell_execute_file_list['txt']    = 'vim'
+let g:vimshell_execute_file_list['vim']    = 'vim'
+let g:vimshell_execute_file_list['c']      = 'vim'
+let g:vimshell_execute_file_list['h']      = 'vim'
+let g:vimshell_execute_file_list['cpp']    = 'vim'
+let g:vimshell_execute_file_list['d']      = 'vim'
+let g:vimshell_execute_file_list['xml']    = 'vim'
+let g:vimshell_execute_file_list['java']   = 'vim'
+let g:vimshell_execute_file_list['objc']   = 'vim'
+let g:vimshell_execute_file_list['objcpp'] = 'vim'
+
+let g:vimshell_execute_file_list['scpt']  = 'osascript'
+let g:vimshell_execute_file_list['sh']    = 'bash'
+let g:vimshell_execute_file_list['rb']    = 'ruby'
+let g:vimshell_execute_file_list['pl']    = 'perl'
+let g:vimshell_execute_file_list['py']    = 'python'
+let g:vimshell_execute_file_list['html']  = 'open'
+let g:vimshell_execute_file_list['xhtml'] = 'open'
+
+"call vimshell#set_execute_file('html,xhtml', 'gexe firefox')
+
+let g:vimshell_interactive_interpreter_commands = g:vimshell_execute_file_list
+
+vnoremap <Leader>ri :'<,'>VimShellSendString<CR>
+vnoremap <Leader>rr :'<,'>VimShellSendBuffer<CR>
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " add  menu
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+
+
+func! CompileRun()
+  exec "w"
+  exec 'VimShellInteractive --split='split | resize 20' irb sh '.s:_current_file_dir.'/src/execmd/run.sh -l '.&filetype.' -p '.resolve(expand("%:p"))
+  " if &filetype == 'c'
+  "     "exec "!clang -Wall % -o %<"
+  "     "exec "VimShellExecute %<"
+  " elseif &filetype == 'cpp'
+  "     exec "!clang++ -Wall -g -std=c++14 % -o %<"
+  "     exec "VimShellExecute %<"
+  " elseif &filetype == 'java'
+  "     exec "!javac %"
+  "     exec "VimShellExecute java %<"
+  " elseif &filetype == 'sh'
+  "     exec "!chmod a+x %"
+  "     exec "VimShellExecute %"
+  " elseif &filetype == 'python'
+  "     exec "VimShellExecute python %"
+  " endif
+endfunc
+
 
 
 let s:LEADERMENU = YXVim#lib#import('leadermenu')
@@ -156,6 +217,12 @@ call s:LEADERMENU.set_command(s:vimshell_menu, 'Pop', 'p', ':VimShellPop')
 " You can use vimshell like as GNU screen.
 " {option} is same to |vimshell-internal-bg| options.  If omit {command}, current buffer path is used.
 call s:LEADERMENU.set_command(s:vimshell_menu, 'Execute', 'e', ':VimShellExecute')
+call s:LEADERMENU.set_command(s:vimshell_menu, 'Run', 'r', 'call CompileRun()')
+
+
+" Interactive
+call s:LEADERMENU.set_command(s:vimshell_menu, 'Interactive', 'i', 'call feedkeys(":VimShellInteractive ", "i")')
+call s:LEADERMENU.set_command(s:vimshell_menu, 'Interactive', 'ii', ':VimShellInteractive')
 
 
 " Closes the vimshell buffer with {buffer-name}.
@@ -164,81 +231,16 @@ call s:LEADERMENU.set_command(s:vimshell_menu, 'Quite', 'q', ':VimShellClose')
 
 
 
+" Help for 
+let s:help_menu = s:LEADERMENU.create_menu()
+call s:LEADERMENU.set_submenu(s:vimshell_menu, 'Help', '?', s:help_menu)
+
+call s:LEADERMENU.set_command(s:help_menu, 'Send buf code to interactive', '<Leader>rr', '')
+call s:LEADERMENU.set_command(s:help_menu, 'Send Select coede to interactive', '<Leader>ri', '')
+call s:LEADERMENU.set_command(s:help_menu, '1.Open a Interactive view. 2.send code to interactive', '.', '')
+
+
 " 注册
 call YXVim#api#globalmenu#set_submenu('Shell', 's', s:vimshell_menu)
 
 
-"
-" 'call <SNR>' . s:SID() . '_normalWithLeader("ca")'
-"
-" call s:LEADERMENU.set_command(s:leaderf_menu, 'File', 'f', YXVim#api#base#leader_keys('ff'))
-" call s:LEADERMENU.set_command(s:leaderf_menu, 'Buff', 'b', YXVim#api#base#leader_keys('fb'))
-" call s:LEADERMENU.set_command(s:leaderf_menu, 'Mru', 'm', YXVim#api#base#leader_keys('fm'))
-" call s:LEADERMENU.set_command(s:leaderf_menu, 'Tag', 't', YXVim#api#base#leader_keys('ft'))
-" call s:LEADERMENU.set_command(s:leaderf_menu, 'Line', 'l', YXVim#api#base#leader_keys('fl'))
-" call s:LEADERMENU.set_command(s:leaderf_menu, 'Function', 'h', YXVim#api#base#leader_keys('fh'))
-"
-"
-"
-" let s:grep_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:leaderf_menu, 'Grep', 'g', s:grep_menu)
-" call s:LEADERMENU.set_command(s:grep_menu, 'vimgrep', 'g', YXVim#api#base#leader_keys('g'))
-"
-"
-" let s:help_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:leaderf_menu, 'Help', '?', s:help_menu)
-"
-"
-" "open menu
-" let s:open_help_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:help_menu, 'Open', 'o', s:open_help_menu)
-"
-" call s:LEADERMENU.set_command(s:open_help_menu, 'Open in horizontal split window', '<C-X>', '')
-" call s:LEADERMENU.set_command(s:open_help_menu, 'Open in vertical split window', '<C-]>', '')
-" call s:LEADERMENU.set_command(s:open_help_menu, 'Open in new tabpage', '<C-T>', '')
-"
-"
-" " select menu
-" let s:open_select_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:help_menu, 'Select', 's', s:open_select_menu)
-"
-" call s:LEADERMENU.set_command(s:open_select_menu, 'Select multiple files', '<C-S>', '')
-" call s:LEADERMENU.set_command(s:open_select_menu, 'Select all files', '<C-A>', '')
-"
-"
-" " switch model
-" let s:open_model_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:help_menu, 'Model', 'm', s:open_model_menu)
-"
-" call s:LEADERMENU.set_command(s:open_model_menu, 'Switch to normal mode', '<Tab>', '')
-" call s:LEADERMENU.set_command(s:open_model_menu, 'Switch between fuzzy search mode and regex mode', '<C-R>', '')
-" call s:LEADERMENU.set_command(s:open_model_menu, 'Switch between full path search mode and name only search mode', '<C-F>', '')
-"
-"
-" " grep model
-" let s:open_grep_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:help_menu, 'Grep', 'g', s:open_grep_menu)
-"
-" call s:LEADERMENU.set_command(s:open_grep_menu, 'Grep in current buff', '<leader>gc', '')
-" call s:LEADERMENU.set_command(s:open_grep_menu, 'Grep in All buff', '<leader>gb', '')
-" call s:LEADERMENU.set_command(s:open_grep_menu, 'Append result in preview result', '<leader>ga', '')
-" call s:LEADERMENU.set_command(s:open_grep_menu, 'Recall last search', '<leader>gr', '')
-"
-"
-"
-" " preview model
-" let s:open_preview_menu = s:LEADERMENU.create_menu()
-" call s:LEADERMENU.set_submenu(s:help_menu, 'Preview', 'p', s:open_preview_menu)
-"
-" call s:LEADERMENU.set_command(s:open_preview_menu, 'Preview window', '<C-P>', '')
-" call s:LEADERMENU.set_command(s:open_preview_menu, 'Scroll in in preview window', '<C-UP>', '')
-" call s:LEADERMENU.set_command(s:open_preview_menu, 'Scroll down in preview window', '<C-DOWN>', '')
-"
-" " other
-" call s:LEADERMENU.set_command(s:help_menu, 'Quite', '<Esc>', '')
-"
-"
-" " 注册
-" call YXVim#api#globalmenu#set_submenu('LeaderF', 'f', s:leaderf_menu)
-"
-"

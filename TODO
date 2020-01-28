@@ -1,0 +1,12 @@
+
+1. Vim 标配, 这个配置很好， 按照这个更改一下
+"https://github.com/vimcn/vimrc.sample
+
+
+2. 尝试解决<Space>, 后，选中内容失效的问题
+
+3. chanese layer 中被注释掉掉文档，过一遍，有一些很不错
+
+4. gitgutter plugin
+
+5. Space 中，添加一种专门用于说明的文档
