@@ -1,5 +1,5 @@
 
-1. Vim 标配, 这个配置很好， 按照这个更改一下
+1. Vim 标配, 有时间对照看一下 
 "https://github.com/vimcn/vimrc.sample
 
 
@@ -10,3 +10,15 @@
 4. gitgutter plugin
 
 5. Space 中，添加一种专门用于说明的文档
+
+6. UltiSnips 整合snap
+
+7. 完成 wiki 的layer
+
+8. Tag 系统不完善
+
+9. complete 系统
+
+10. 有个project 的
+
+11. git 相关
