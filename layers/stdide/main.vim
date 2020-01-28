@@ -86,6 +86,8 @@ function! s:cb_load() abort
   call YXVim#api#base#source(s:_current_file_dir.'/tabular.vim')
   " add easymotion config
   call YXVim#api#base#source(s:_current_file_dir.'/easymotion.vim')
+  " add rainbow config
+  call YXVim#api#base#source(s:_current_file_dir.'/rainbow.vim')
 
 endfunction
 
