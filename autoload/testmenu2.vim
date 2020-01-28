@@ -4,7 +4,6 @@
 " Version: 2.0 - 03/08/2018 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-echom 'test!test!'
 
 let s:actionsheet = YXVim#lib#import('actionsheet')
 

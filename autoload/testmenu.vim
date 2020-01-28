@@ -4,7 +4,6 @@
 " Version: 2.0 - 03/08/2018 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-echom 'test!test!'
 
 
 let s:bufnr = -1
@@ -240,7 +239,6 @@ function! s:wait_for_input()
     call s:winclose()
     doautocmd WinEnter
   elseif match(inp, "^<LGCMD>paging_help") == 0
-    echom "what's the fuck?"
     let s:guide_help_mode = 1
     call s:updateStatusline()
     redraw!
@@ -262,7 +260,6 @@ function! s:wait_for_input()
 endfunction
 
 function! s:handle_input(input)
-  echom "not running"
   call s:winclose()
   if type(a:input) ==? type({})
     let s:lmap = a:input
