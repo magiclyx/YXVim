@@ -1,1 +1,32 @@
-#python__pycache__/*.py[cod]*.so#.idea# C*.so#systemThumbs.dbehthumbs.dbDesktop.ini.DS_Store# vim*.swp
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C
+*.so
+
+#system
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+.DS_Store
+
+### Vim ###
+# Swap
+[._]*.s[a-v][a-z]
+!*.svg  # comment out if you don't need vector files
+[._]*.sw[a-p]
+[._]s[a-rt-v][a-z]
+[._]ss[a-gi-z]
+[._]sw[a-p]
+
+### vscode ###
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+*.code-workspace
