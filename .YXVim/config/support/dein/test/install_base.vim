@@ -17,9 +17,9 @@ function! s:suite.copy_directories() abort
   let temp2 = tempname()
   let temp3 = tempname()
 
-  call mkdir(temp)
-  call mkdir(temp2)
-  call mkdir(temp3)
+  call mkdir(temp, 'p')
+  call mkdir(temp2, 'p')
+  call mkdir(temp3, 'p')
   call writefile([], temp.'/foo')
   call writefile([], temp3.'/bar')
   call s:assert.true(filereadable(temp.'/foo'))

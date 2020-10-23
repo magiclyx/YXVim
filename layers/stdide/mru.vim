@@ -15,7 +15,7 @@ let s:_current_file_dir = resolve(expand('<sfile>:p:h'))
 let g:MRU_Home = g:Data_Home.'/mru'
 let g:MRU_FILE = g:MRU_Home . '/vim_mru_files'
 if finddir(g:MRU_Home) ==# ''
-    silent call mkdir(g:MRU_Home)
+    silent call mkdir(g:MRU_Home, 'p')
 endif
 let MRU_File = get(g:, 'MRU_File', g:MRU_FILE)
 

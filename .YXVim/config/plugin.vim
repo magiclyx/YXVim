@@ -12,12 +12,12 @@ let g:Data_Plugin_Dir = g:Data_Home.'/plugins'
 
 " prepare the dir
 if finddir(g:Data_Home) ==# ''
-    silent call mkdir(g:Data_Home)
+    silent call mkdir(g:Data_Home, 'p')
 endif
 
 
 if finddir(g:Data_Plugin_Dir) ==# ''
-    silent call mkdir(g:Data_Plugin_Dir)
+    silent call mkdir(g:Data_Plugin_Dir, 'p')
 endif
 
 

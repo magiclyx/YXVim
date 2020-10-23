@@ -45,14 +45,14 @@ let g:App_Support_Home = g:Data_Home.'/support'
 " setup data dir
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if finddir(g:Data_Home) ==# ''
-    silent call mkdir(g:Data_Home)
+    silent call mkdir(g:Data_Home, 'p')
 endif
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " setup app dir
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if finddir(g:App_Main_Home) ==# ''
-    silent call mkdir(g:App_Main_Home)
+    silent call mkdir(g:App_Main_Home, 'p')
 endif
 
 let $PATH .= g:App_Main_Home
@@ -63,7 +63,7 @@ let $PATH .= g:App_Main_Home
 " setup app support dir
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 if finddir(g:App_Support_Home) ==# ''
-    silent call mkdir(g:App_Support_Home)
+    silent call mkdir(g:App_Support_Home, 'p')
 endif
 
 
